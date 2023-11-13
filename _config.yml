@@ -2,24 +2,29 @@
 #
 # This config file is meant for settings that affect your whole site, values
 # which you are expected to set up once and rarely edit after that. If you find
-# yourself editing these this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
+# yourself editing these this file very often, consider using Jekyll's data
+# files feature for the data you need to update frequently.
 #
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
 # These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.github_repo }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
-title: Just the Class
-tagline: A Jekyll template for course websites
-description: A modern, highly customizable, responsive Jekyll template for course websites
-author: Kevin Lin
-baseurl: '/just-the-class' # the subpath of your site, e.g. /blog
-url: 'https://kevinl.info' # the base hostname & protocol for your site, e.g. http://example.com
+# you will see them accessed via {{ site.title }}, {{ site.github_repo }}, and
+# so on.  You can create any custom variable you would like, and they will be
+# accessible in the templates via {{ site.myvariable }}.
+title: "CSSE 490: Network Security"
+tagline: Network Security Class at Rose-Hulman Institute of Technology
+description: Winter 2023-2024
+author: Mohammad A. Noureddine
+# the subpath of your site, e.g. /blog
+baseurl: '/courses/netsec'
+# the base hostname & protocol for your site, e.g. http://example.com
+url: 'https://netsos.csse.rose-hulman.edu'
 exclude: ["Gemfile", "Gemfile.lock", "LICENSE"]
+
+# icon to appear on the menu bar in the browser
+favicon_ico: 'assets/images/rose.png'
 
 # Theme settings
 remote_theme: just-the-docs/just-the-docs@v0.7.0
@@ -27,11 +32,14 @@ color_scheme: light
 search_enabled: true
 heading_anchors: true
 permalink: pretty
+
+# TODO: Fix these.
+# These will appear at the top right next to the search bar.
 aux_links:
-  Kevin Lin:
-    - 'https://kevinl.info'
-  Just the Class on GitHub:
-    - 'https://github.com/kevinlin1/just-the-class'
+  Gradescope:
+    - 'https://gradescope.com'
+  Network Security Research:
+    - 'https://netsos.csse.rose-hulman.edu'
 footer_content:
 
 # Collections for website data
@@ -40,6 +48,7 @@ collections:
   modules:
   schedules:
   announcements:
+
 # Default layouts for each collection type
 defaults:
   - scope:
