@@ -1,39 +1,73 @@
 ---
 layout: home
-title: Just the Class
+title: "CSSE 490: Network Security"
 nav_exclude: true
 permalink: /:path/
 seo:
   type: Course
-  name: Just the Class
+  name: Network Security
 ---
 
-# Just the Class
+# Introduction to Network Security
+## Rose-Hulman Institute of Technology, Winter 2023-24
 
-Just the Class is a GitHub Pages template developed for the purpose of quickly deploying course websites. In addition to serving plain web pages and files, it provides a boilerplate for:
+Welcome to CSSE490: Introduction to Network Security at RHIT!
 
-- [announcements](announcements.md),
-- a [course calendar](calendar.md),
-- a [staff](staff.md) page,
-- and a weekly [schedule](schedule.md).
+![virus_farm](https://imgs.xkcd.com/comics/network.png)
 
-Just the Class is a template that extends the popular [Just the Docs](https://github.com/just-the-docs/just-the-docs) theme, which provides a robust and thoroughly-tested foundation for your website. Just the Docs include features such as:
+This course serves as an introduction to the basic concepts of network security
+with an emphasis on practical and development skills. Topics include denial of
+service attacks and defenses, authentication, key distribution, message
+authentication, access control, protocol security, virtual private networks, and
+security standards.  The course will provide a review of basic network design,
+the end-to-end principle, and basic cryptography. Prerequisites: CSSE 220 or
+approval of the instructor.
 
-- automatic [navigation structure](https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/),
-- instant, full-text [search](https://just-the-docs.github.io/just-the-docs/docs/search/) and page indexing,
-- and a set of [UI components](https://just-the-docs.github.io/just-the-docs/docs/ui-components) and authoring [utilities](https://just-the-docs.github.io/just-the-docs/docs/utilities).
+Before class starts, please familiarize yourself with this website, including
+the different menus on the left-hand pane. This is the source of all
+authoritative announcements for the class, if this page and what I say in class
+contradict each other, please follow what is on this webpage.
 
-## Getting Started
+### Before the first class
 
-Getting started with Just the Class is simple.
+Before our first class, please read the [syllabus]() and get to know your
+[instructor]({{ site.baseurl }}/staff). This class is mostly built on labs that
+you will be doing during class meeting times, therefore it is important that you
+come to the first day prepared with a good development environment.
 
-1. Create a [new repository based on Just the Class](https://github.com/kevinlin1/just-the-class/generate).
-1. Update `_config.yml` and `README.md` with your course information. [Be sure to update the url and baseurl](https://mademistakes.com/mastering-jekyll/site-url-baseurl/).
-1. Configure a [publishing source for GitHub Pages](https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages). Your course website is now live!
-1. Edit and create `.md` [Markdown files](https://guides.github.com/features/mastering-markdown/) to add more content pages.
+Therefore, I do recommend that you follow the steps below to get started strong
+on day 1:
 
-Just the Class has been used by instructors at Stanford University ([CS 161](https://stanford-cs161.github.io/winter2021/)), UC Berkeley ([Data 100](https://ds100.org/fa21/)), UC Santa Barbara ([CSW8](https://ucsb-csw8.github.io/s22/)), Northeastern University ([CS4530/5500](https://neu-se.github.io/CS4530-CS5500-Spring-2021/)), and Carnegie Mellon University ([17-450/17-950](https://cmu-crafting-software.github.io/)). Share your course website and find more examples in the [show and tell discussion](https://github.com/kevinlin1/just-the-class/discussions/categories/show-and-tell)!
+1. __Terminal Emulator__<br>
+    Get yourself a good terminal emulator, preferably running on a Unix-based
+    distribution. Follow the steps in the [tutorials]() page to set yourself up
+    with one.
+2. __Terminal skills__<br>
+    For this class to work out, you will need to be comfortable with a terminal
+    window. There are plenty of tutorials out there to help you out, but
+    essential skills like navigating directories, copying and moving files,
+    `grep`, and compiling and running programs are crucial for your success.
+3. __Version Control__<br>
+    Create an __empty private__ repository (anywhere you prefer, most use
+    [Github](github.com)). Follow the steps in the [tutorials]() page to get the
+    content of the first lab and test connectivity.
+4. __Connectivity__<br>
+    Throughout the class, we will be working on dedicated machines that would
+    allow us to run risky experiments. Follow the steps in the [tutorials]()
+    page to make sure you can access your assigned virtual machine, and make
+    sure that you can `ssh` into it.
+5. __tmux__<br>
+    It is in the nature of networking labs that you will be working across two
+    or more machines (containers in our case). Therefore, it is crucial that you
+    can switch between them easily. I strongly recommend that you take a moment
+    to familiarize yourself with `tmux` and check out my provided configuration
+    file on the [tutorials]() page.
+6. __Coding__<br>
+    Most of your coding will be done on the remote machines you are assigned.
+    Those machines already have `vim` and `emacs` preintalled. You can check out
+    my config file for `vim` in the [tutorials]() page. You can also hook up
+    `vscode` to connect remotely to your machine if you prefer to use an IDE. I
+    will leave that one up to you to figure out if you elect to do so.
+7. __Enjoy__<br>
+    Enjoy the class and please give me feedback as we move along the quarter!
 
-### Local development environment
-
-Just the Class requires no special Jekyll plugins and can run on GitHub Pages' standard Jekyll compiler. To setup a local development environment, clone your template repository and follow the GitHub Docs on [Testing your GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll).

@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.github_repo }}, and
 # so on.  You can create any custom variable you would like, and they will be
 # accessible in the templates via {{ site.myvariable }}.
-title: "CSSE 490: Network Security"
+title: "CSSE 490"
 tagline: Network Security Class at Rose-Hulman Institute of Technology
 description: Winter 2023-2024
 author: Mohammad A. Noureddine
@@ -74,6 +74,10 @@ defaults:
       type: announcements
     values:
       layout: announcement
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
 
 compress_html:
   clippings: all
