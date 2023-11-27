@@ -75,6 +75,9 @@ defaults:
     values:
       layout: announcement
 
+# enable copy code button
+enable_copy_code_button: true
+
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
@@ -86,3 +89,41 @@ compress_html:
   startings: []
   blanklines: false
   profile: false
+
+callouts:
+  new:
+    title: New
+    color: green
+
+  highlight:
+    color: yellow
+
+  important:
+    color: blue
+
+  warning:
+    title: Warning
+    color: red
+
+# my own links
+dev_links:
+  gh_site_repo: https://github.com/rhit-netsos/netsec-public
+  # gh_labs_repo:
+
+# footer content
+footer_content: >-
+  Copyright &copy; 2023 Rose-Hulman Institute of Technology.
+
+# Footer last edited timestamp
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p"
+
+# Footer "Edit this page on GitHub" link text.
+gh_edit_link: true
+gh_edit_link_text: "If you notice any mistakes, please open an issue on GitHub."
+gh_edit_repository: "https://github.com/rhit-netsos/netsec-public"
+gh_edit_branch: "main"
+gh_edit_view_mode: "tree"
+
+# Done.
+
