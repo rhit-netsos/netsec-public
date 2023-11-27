@@ -1,77 +1,50 @@
 ---
 layout: page
 title: About
+last_modified_date: Sun Nov 26 19:33:49 2023
 description: >-
-    Course policies and information.
+    Fun description of the course
 ---
 
-# About
-{:.no_toc}
+# About this class
 
-## Table of contents
-{: .no_toc .text-delta }
+![https://xkcd.com/538/](https://imgs.xkcd.com/comics/security.png)
 
-1. TOC
-{:toc}
+It was a dark and stormy night, Heimdallr, the guardian of the gods, kept a
+watchful eye on the Bifrost bridge. “Could it be tonight? Would Loki do it? I
+can feel it coming. Ragnarok”, said Heimdallr to himself. Thoughts of carnage
+and destruction occupied his ever-observing head. He had a disturbing feeling in
+his gut that something was going to happen tonight, and he needed to let the
+gods know about it.
 
----
+And finally, there it was, he could see it on the horizon: the giant head of the
+wolf, Fenrir, alongside his father, the deceiver Loki. Hel, the goddess of the
+underworld, can be seen leading the army of the dead. “It is time, I must send a
+message to Odin and the gods to prepare for the final battle”, said Heimdallr. 
 
-## About
+As he was typing the message on his iPhone 13Pro, a thought popped into his
+head: “How can I tell Odin without anyone intercepting the message”? Loki was
+known to have hired a band of hackers to support his war efforts. Furthermore,
+how can Odin know that it was Heimdallr who wrote the message?  How could he
+stop Loki’s script kiddies from impersonating him in an email or a message? How
+can he make sure that the tunnel to Asgard was safe and not under attack? A
+moment of panic took over Heimdallr, **how can he send sensitive information on
+an untrusted network?**
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Aliquam ut porttitor leo a diam.
-Erat nam at lectus urna duis convallis convallis tellus id. Pellentesque elit
-eget gravida cum sociis natoque penatibus et magnis. Ultrices vitae auctor eu
-augue ut lectus arcu. Morbi tristique senectus et netus et malesuada. Turpis
-tincidunt id aliquet risus feugiat in ante. Consequat interdum varius sit amet
-mattis vulputate enim nulla. Felis eget nunc lobortis mattis aliquam. Eu non
-diam phasellus vestibulum lorem sed risus. A condimentum vitae sapien
-pellentesque habitant morbi tristique. Orci dapibus ultrices in iaculis nunc sed
-augue lacus viverra. Proin sagittis nisl rhoncus mattis rhoncus urna neque.
-Dictum varius duis at consectetur lorem donec massa sapien. Blandit cursus risus
-at ultrices mi tempus imperdiet. Laoreet sit amet cursus sit amet dictum sit
-amet justo. Felis eget nunc lobortis mattis aliquam faucibus. Nam aliquam sem et
-tortor consequat.
+In this course, we will set up to help the Norse gods by exploring how Heimdallr
+can send a private message, in a world that is increasingly public and under
+attack. We will take a look at this problem from two perspectives: (1) Loki’s
+perspective, who is trying to intercept and exploit any messages sent to the
+Gods, and (2) Heimdallr and the gods’ perspective, who are trying to secure
+their messages from Loki’s army. 
 
-## Lecture
+Just like Heimdallr and the gods, we find ourselves today in a society that
+increasingly puts trust in the Internet, a network that is not worthy of that
+trust. The Internet was designed with the end-to-end principle in mind; push the
+complexity into the endpoints as much as possible, keeping the intermediary
+nodes (core routers, switches, etc.) as simple as possible. This is great and
+all, but it renders the medium of communication unreliable and untrustworthy.
+Malicious actors can intercept traffic, change network packets, and masquerade
+as other users or as Internet authorities. The process of ensuring private
+communication over an untrusted network is the main topic of this class. 
 
-Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Vulputate
-dignissim suspendisse in est ante in. Massa vitae tortor condimentum lacinia
-quis vel. Gravida neque convallis a cras semper auctor. Pellentesque eu
-tincidunt tortor aliquam nulla. Quam adipiscing vitae proin sagittis nisl
-rhoncus mattis rhoncus urna. Sit amet purus gravida quis blandit turpis cursus
-in. Porttitor leo a diam sollicitudin tempor. Vel facilisis volutpat est velit
-egestas dui id ornare. Cum sociis natoque penatibus et magnis. Tristique magna
-sit amet purus gravida. Nibh sit amet commodo nulla facilisi nullam vehicula.
-Aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque. Id semper
-risus in hendrerit gravida. Sit amet justo donec enim diam vulputate ut pharetra
-sit. Vitae justo eget magna fermentum. Tellus in metus vulputate eu.
-Pellentesque id nibh tortor id aliquet lectus proin nibh nisl. Etiam erat velit
-scelerisque in dictum non consectetur a erat. Pellentesque eu tincidunt tortor
-aliquam nulla.
-
-## Resources
-
-Lacus viverra vitae congue eu. Suspendisse in est ante in nibh mauris cursus
-mattis. Nisl vel pretium lectus quam id leo in. Euismod lacinia at quis risus
-sed vulputate odio. Non enim praesent elementum facilisis. Aliquet sagittis id
-consectetur purus ut faucibus pulvinar elementum integer. Id interdum velit
-laoreet id donec ultrices tincidunt arcu. Urna molestie at elementum eu
-facilisis sed odio. Auctor urna nunc id cursus metus aliquam eleifend. Volutpat
-commodo sed egestas egestas fringilla phasellus. Libero nunc consequat interdum
-varius sit amet mattis. Imperdiet nulla malesuada pellentesque elit eget gravida
-cum sociis natoque. Tortor vitae purus faucibus ornare suspendisse. Auctor elit
-sed vulputate mi.
-
-## Assignments
-
-Vehicula ipsum a arcu cursus vitae congue. Etiam dignissim diam quis enim
-lobortis scelerisque fermentum dui. Risus sed vulputate odio ut enim blandit.
-Aliquam id diam maecenas ultricies mi eget. Id consectetur purus ut faucibus
-pulvinar elementum integer enim neque. Eget mi proin sed libero enim sed
-faucibus. Sem integer vitae justo eget magna fermentum iaculis. In mollis nunc
-sed id semper risus in. Sit amet risus nullam eget felis eget. Mattis
-ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget. Nascetur
-ridiculus mus mauris vitae ultricies leo integer malesuada. Porta non pulvinar
-neque laoreet suspendisse interdum consectetur libero id. At varius vel pharetra
-vel turpis nunc eget. Scelerisque purus semper eget duis at tellus.
