@@ -40,7 +40,9 @@ aux_links:
     - 'https://gradescope.com'
   Network Security Research:
     - 'https://netsos.csse.rose-hulman.edu'
-footer_content:
+
+# Makes Aux links open in a new tab. Default is false
+aux_links_new_tab: true
 
 # Collections for website data
 collections:

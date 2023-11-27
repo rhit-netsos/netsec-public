@@ -2,6 +2,7 @@
 layout: page
 title: Syllabus
 last_modified_date: Sun Nov 26 19:21:37 2023
+nav_order: 2
 description: >-
   Course syllabus
 ---
