@@ -1,11 +1,20 @@
 ---
 layout: page
-title: Lab setup
+title: Lab repo access
 last_modified_date: Friday Nov 24 23:34:40 2023
 current_term: Winter 2023-24
+nav_order: 10
 parent: Guides
 description: >-
   Lab setup to grab the labs.
+---
+
+## Table of contents
+{:.no_toc}
+
+1. TOC
+{:toc}
+
 ---
 
 # Lab setup for CSSE490: Network Security

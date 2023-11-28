@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Calendar
-nav_order: 100
+nav_order: 3
 description: Listing of course modules and topics.
 ---
 

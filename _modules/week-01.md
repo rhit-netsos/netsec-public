@@ -1,23 +1,36 @@
 ---
-title: Introduction to Java
+title: "Week 01: Introduction to Networking"
 ---
 
-Sep 28
-: [Java & Git](#)
-  : [1.1](#)
+Nov 27
+: [Introductions and Syllabus](#)
+  : [slides]({{site.baseurl}}/assets/slides/intro.pdf)
 
-Sep 29
+Nov 28
+: **Prelab**{: .label .label-purple }[Server access setup](#)
+  : [Instructions]({{site.baseurl}}/docs/guides/guides)
+
+Nov 30
+: **Lab Released**{: .label .label-blue }[Lab 01](#)
+  : TBA
+
+Dec 01
+: Continue Lab 01
+
+<!--
+Nov 28
 : **Section**{: .label .label-purple }[Intro to Java](#)
   : [Solution](#)
 
-Sep 30
+Nov 30
 : [Variables & Objects](#)
   : [1.2](#), [2.1](#)
 
-Oct 1
+Dec 01
 : **Lab**{: .label .label-purple } [Intro to Java](#)
 
 Oct 2
 : [Tracing, IntLists, & Recursion](#)
   : [2.1](#)
 : **HW 1 due**{: .label .label-red }
+-->

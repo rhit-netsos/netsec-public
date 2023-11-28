@@ -4,6 +4,7 @@ title: vim setup
 last_modified_date: Friday Nov 24 23:34:40 2023
 current_term: Winter 2023-24
 parent: Guides
+nav_order: 40
 description: >-
   General vim setup and config file.
 ---
@@ -71,7 +72,7 @@ the following:
      key anywhere in your text.
   3. `[c]ommand-line` mode: This is where you can enter editor commands to do
      very useful things (like find and replace, regular expression-based
-     operations, etc.). 
+     operations, etc.).
 
      To enter command-line mode from `normal` mode, press the `:` key on your
      keyboard, you will notice that your cursor will move to the bottom of your
@@ -143,7 +144,7 @@ what we really wanted it to be part of the `main` function. Let's make that
 happen.
 
 1. __Go to line 3__:
-  
+
     To go to a specific line in `vim`, enter `normal` mode, then enter
     `command-line` mode using `:`, then type your line number followed by
     `Enter` (so your command line looks like `:3`). Line 3 should now be
@@ -161,7 +162,7 @@ happen.
     > To see what you have copied/cut, you can use `:reg` in `command-line` mode.
 
 3. __Paste the line__:
-  
+
     Now let's go paste that line where we want it to be. We want `int x = 3;` to
     appear right after the `int main(int argc, char **argv) {` line. Therefore,
     in `normal` mode, move your cursor to line 4 (`:4`), then in `normal`
@@ -172,7 +173,7 @@ happen.
     use `P` instead of `p`.
 
 4. __Fixing the indentation__:
-  
+
     If you notice now, the line is in the right spot, but the indentation is
     messed up, we don't like that!
 
