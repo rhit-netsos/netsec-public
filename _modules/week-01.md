@@ -7,7 +7,7 @@ Nov 27
   : [slides]({{site.baseurl}}/assets/slides/intro.pdf)
 
 Nov 28
-: **Prelab**{: .label .label-purple }[Server access setup](#)
+: **Prelab**{: .label .label-purple }[Server access setup]({{site.baseurl}}/docs/guides/vm)
   : [Instructions]({{site.baseurl}}/docs/guides/guides)
 
 Nov 30
