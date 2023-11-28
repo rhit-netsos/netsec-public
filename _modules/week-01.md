@@ -8,7 +8,7 @@ Nov 27
 
 Nov 28
 : **Prelab**{: .label .label-purple }[Server access setup]({{site.baseurl}}/docs/guides/vm)
-  : [Instructions]({{site.baseurl}}/docs/guides/guides)
+  : [Prelab 1]({{site.baseurl}}/docs/labs/prelab)
 
 Nov 30
 : **Lab Released**{: .label .label-blue }[Lab 01](#)
