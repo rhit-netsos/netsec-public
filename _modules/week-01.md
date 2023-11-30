@@ -12,7 +12,7 @@ Nov 28
 
 Nov 30
 : **Lab Released**{: .label .label-blue }[Lab 01]({{site.baseurl}}/docs/labs/lab1)
-  : [`scapy` tutorial]({{site.baseurl}}/docs/guildes/scapy)
+  : [`scapy` tutorial]({{site.baseurl}}/docs/guides/scapy) [Question sheet]({{site.baseurl}}/assets/labs/lab1.pdf)
 
 Dec 01
 : Continue Lab 01
