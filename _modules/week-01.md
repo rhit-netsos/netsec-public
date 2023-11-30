@@ -11,7 +11,7 @@ Nov 28
   : [Prelab 1]({{site.baseurl}}/docs/labs/prelab)
 
 Nov 30
-: **Lab Released**{: .label .label-blue }[Lab 01]({{site.baseurl}}docs/labs/lab1)
+: **Lab Released**{: .label .label-blue }[Lab 01]({{site.baseurl}}/docs/labs/lab1)
   : [`scapy` tutorial]({{site.baseurl}}/docs/guildes/scapy)
 
 Dec 01

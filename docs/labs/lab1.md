@@ -455,12 +455,16 @@ following questions on the lab sheet:
 
 ---
 
-# Implementation tasks
+# 3. Implementation tasks
 
 Now we come to the fun stuff. In this task we would like to do two things:
 
 1. Reverse engineer a protocol and re-implement it.
 2. Trick a machine to think that a non-existing host does exist on the network.
+
+Before continuing here, checkout the [`scapy`
+tutorial]({{site.baseurl}}/docs/guides/scapy) for sniffing and forging packets.
+We will stick to using `python` in this lab since it is already long enough.
 
 ## Traceroute
 
