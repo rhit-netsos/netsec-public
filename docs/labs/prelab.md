@@ -3,7 +3,7 @@ layout: page
 title: Prelab
 last_modified_date: Tue 28 Nov 2023 12:25:46 PM EST
 current_term: Winter 2023-24
-nav_orer: 1
+nav_order: 1
 parent: Labs
 description: >-
   Setup and docker guide to create labs.
