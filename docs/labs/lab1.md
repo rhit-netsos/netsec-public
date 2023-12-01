@@ -222,7 +222,7 @@ using `mkdir data/` and change into it (`cd data/`).
 Then in there, grab a copy of the `pcap` file from the server using:
 
   ```shell
-  (local) $ rysnc -e ssh -Paz 'netsec:~/netsec-labs-user/lab1/volumes/*.pcap' .
+  (local) $ rsync -e ssh -Paz 'netsec:~/netsec-labs-user/lab1/volumes/*.pcap' .
   ```
 
 Note that you will need to replace `~/netsec-labs-user/lab1/volumes/` with the
@@ -361,7 +361,7 @@ On `hostA`, do:
   ```
 
 This time, `hostA` will continuously ping `hostB` until 5 minutes have passed.
-After the 2 minutes expire, stop both packet captures on `hostB` and `attacker`.
+After the 5 minutes expire, stop both packet captures on `hostB` and `attacker`.
 Open the packet captures in Wireshark (remember to use the fetch script first)
 and compare what you see. We are specifically interested in two things:
 
