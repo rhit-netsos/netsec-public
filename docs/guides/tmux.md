@@ -121,8 +121,8 @@ the following:
    able to see all of that in there!
 
 Now that I have convinced how great that is, let's detach from our session. To
-do so, hit the prefix key, followed by the `q` key. For example, if you're still
-using the default prefix, then you need to hit `<C-b> q`.
+do so, hit the prefix key, followed by the `d` key. For example, if you're still
+using the default prefix, then you need to hit `<C-b> d`.
 
 You will notice that your session will close and will be sent to the background.
 You are now back in your native terminal window, and you can launch new
