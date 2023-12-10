@@ -696,6 +696,13 @@ as follows:
 char *ip_str = ip_to_str((void*)&ip->saddr);
 ```
 
+## Step-by-step instructions 
+
+To help you out in this task, I have added some step-by-step instructions on how
+to parse the IP header, please follow along and ask any questions you might
+have. Here's a direct [link]({{site.baseurl}}/docs/guides/ip_pcap) or you can
+find it on the left-hand side menu of the page.
+
 # Task 2: Print an ICMP packet content
 
 In this second task, create a program called `printicmp.c` that prints the
@@ -734,6 +741,30 @@ Don't forget to add the needed header files to access this structure:
 ```c
 #include <netinet/ip_icmp.h>
 ```
+
+## Implementation steps
+
+Here's a breakdown of what you want to do:
+
+1. Create a file `print_icmp.c` as a copy of `print_ip.c` that we created in the
+   last step.
+2. Add the file to the `makefile`, exactly the same as you did for `print_ip`,
+   expect for the name difference.
+3. Add a function:
+    ```c
+    void parse_icmp(const u_char *pkt, struct pcap_pkthdr *hdr, pcap_t *pcap) {
+      // Add code here...
+    }
+    ```
+4. Call `parse_icmp` from `parse_ipv4` when you realize you found an ICMP
+   packet.
+
+Here's what you want to do in `parse_icmp`:
+
+1. Offset into the packet by skipping over both the Ethernet and the IPv4
+   packets.
+2. Grab a pointer to that location, and cast it into a `struct icmphdr *`.
+3. Print the fields you are interested in.
 
 # Submission
 
