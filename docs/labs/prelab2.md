@@ -632,8 +632,6 @@ Compile the code using `make` in the `print` directory, and then run it on the
 
 ```sh
 (attacker) $ ./printarp.bin
-```
-<div class="code-example" markdown="1">
 [LOG:printarp.c:main:46] Starting printarp.bin on interface eth0
 [LOG:printarp.c:main:84] (18:30:52.651590) Got a packet of len 98
 [LOG:printarp.c:main:84] (18:30:53.663912) Got a packet of len 98
@@ -648,7 +646,7 @@ Compile the code using `make` in the `print` directory, and then run it on the
 [LOG:printarp.c:main:84] (18:30:59.807900) Got a packet of len 98
 [LOG:printarp.c:main:84] (18:31:00.831909) Got a packet of len 98
 [LOG:printarp.c:main:84] (18:31:01.855903) Got a packet of len 98
-</div>
+```
 
 # Task 1: Print an IP packet content
 
@@ -696,7 +694,7 @@ as follows:
 char *ip_str = ip_to_str((void*)&ip->saddr);
 ```
 
-## Step-by-step instructions 
+## Step-by-step instructions
 
 To help you out in this task, I have added some step-by-step instructions on how
 to parse the IP header, please follow along and ask any questions you might
