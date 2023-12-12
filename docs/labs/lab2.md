@@ -162,12 +162,274 @@ After the attack, it should become:
 
   ![topo2]({{site.baseurl}}/assets/images/lab2/topo_bad.jpg)
 
-
 ---
 
 # 1. Implementing ping
 
-# 2. Disconnections the two hosts
+We will start off with implement `ping` again, just to learn how to send packet
+using `libpcap`. In your `lab2` directory, navigate to `volumes/src/ping` and
+look at the source code in there.
+
+The code is structured in the following manner:
+
+1. `ping.c`: This contains the `main` function that listens for packets and
+   captures them. Check out the `build_filter_expr` function in there. It build
+   a filter expression for `libpcap` to only capture `icmp` packets that are
+   __not originating__ for the machine running the script. This will help avoid
+   infinite loops (Think about why that might happen?)
+
+   You will not need to edit this file.
+
+   `ping.c` externs a function called `parse_ip`. You can find that function in
+   `parse_ip.c`.
+
+2. `parse_ip.c`: This file contains the `parse_ip` function. In here, you should
+   only check if the IPv4 header contains an ICMP subsequent header.
+
+   This file externs a function called `parse_icmp.c` that would handle ICMP
+   headers.
+
+3. `parse_icmp.c`: This file is where most of what you want to do will happen.
+   This is where we will extract an ICMP header and then reply to an Echo
+   request if any.
+
+You shall only edit the code in `parse_ip.c` and `parse_icmp.c`. The reason why
+we set them up in this way is to make it easy for you to grab code from here and
+use it in other parts of the lab.
+
+## Task 1: Grabbing the ICMP header
+
+You first task is to trigger the `parse_icmp` function to execute. You should
+edit the `parse_ip.c` file to do the following:
+
+1. Check if the IPv4 header contains an ICMP protocol.
+2. If so, call `parse_icmp`. The arguments for `parse_icmp` are documented in
+   the function's signature at the top of the file.
+
+This task should not be more than two line of code.
+
+## Task 2: Parse the ICMP header
+
+Grab two terminals, one connected to `hostA` and another connected to
+`attacker`, and try to ping the `attacker` from `hostA`, you will see that the
+`attacker` does not reply. Our goal here is to change that.
+
+  ```sh
+  (netsec-01) $ ./connect_hostA.sh
+  ┌──(root㉿hostA)-[/]
+  └─# ping -c1 attacker
+  PING attacker (10.10.0.10) 56(84) bytes of data.
+
+  --- attacker ping statistics ---
+  1 packets transmitted, 0 received, 100% packet loss, time 0ms
+  ```
+
+First thing, let's detect an ICMP Echo request on the `attacker`'s machine. 
+
+### Step 1: Print the receipt of an ICMP Echo request
+
+First thing to do is to acknowledge the receipt of an ICMP Echo Request, and
+print from where it is coming from. Edit `parse_icmp.c` to do just that.
+
+You will need to check the type of the ICMP header received, and then just print
+the originating source IPv4 address of the packet; Hints are in the comments for
+step 1 under the `TODO` label.
+
+{:.highlight}
+Note that to run `./ping.bin`, you will need to provide the MAC address of the
+interface on which you should be running. To do so, you can either write it
+manually, or you can read it from the system. Each interface's MAC address is
+store in a pseduo-filesystem on Linux under `/sys`. Specifically, if you read
+the entry `/sys/class/net/eth0/address`, you would be accessing the MAC address
+of `eth0`.
+
+{:.highlight}
+Therefore, to run the code, you would do something like: `./ping.bin $(cat
+/sys/class/net/eth0/address)`
+
+If you implement this correctly, you should see something like (skip the
+`./connect_*.sh` part if you are already on those machines):
+
+  ```sh
+  (netsec-01) $ ./connect_attacker.sh
+  ┌──(root㉿attacker)-[/volumes/src/ping]
+  └─# ./ping.bin $(cat /sys/class/net/eth0/address)
+  [LOG:ping.c:main:75] ./ping.bin (27): Found device: eth0
+  [LOG:ping.c:main:103] Running ping.bin with filter icmp and (not ip src 10.10.0.10) and (not ether src 02:42:0a:0a:00:0a)
+  [LOG:parse_icmp.c:parse_icmp:44] Received ICMP Echo Request from 10.10.0.4
+
+  ```
+while from `hostA`:
+
+  ```sh
+  (netsec-01) $ ./conect_hostA.sh
+  ┌──(root㉿hostA)-[/]
+  └─# ping -c1 attacker
+  PING attacker (10.10.0.10) 56(84) bytes of data.
+
+  --- attacker ping statistics ---
+  1 packets transmitted, 0 received, 100% packet loss, time 0ms
+  ```
+
+### Step 2: Send the reply
+
+Now, we know that we have found our ICMP Echo Request, so we must send our
+reply. The steps involved in doing that are following:
+
+1. Create space of the new packet to be sent.
+2. Set the content of the Ethernet header.
+3. Set the content of the IPv4 header.
+4. Set the content of the ICMP header.
+5. Send the packet.
+
+However, it is tedious to do all of that every single time. So we'll do a little
+hack. Our ICMP Echo Reply looks exactly the same as the Echo Request, except for
+some fields changed here and there, so we will first __copy__ the old packet
+into the new one, edit it, and then send it.
+
+Note that there's a reason why we carried the `len` field with us all this time.
+We will need it to know how much memory to allocate.
+
+So first, allocate room for the return packet and do some error checking:
+  ```c
+  retpkt = mallock(len);
+  if(!retpkt) {
+    print_err("PANIC: No more room in memory\n");
+    exit(99);
+  }
+  ```
+
+Next, copy the packet received into the newly created one:
+  ```c
+  memcpy(retpkt, pkt, len);
+  ```
+
+Now, let's start editing, it is useful to grab the headers, so let's just do
+exactly that:
+  ```c
+  eth_hdr = (struct ether_header*)pkt;
+  iphdr =     // TODO: Add code to get the IPv4 header IN THE NEW PACKET.
+  reticmp =   // TODO: Add code to the ICMP header IN THE NEW PACKET.
+  ```
+
+First, let's start the Ethernet header. This is now going from attacker to
+hostA, while the one we received came from hostA to attacker, so we'd need to
+swap the MAC addresses. Note that we have our own MAC address in the `eth_addr`
+structure at line 32.
+
+Copy source host into destination host:
+```c
+memcpy(eth_hdr->ether_dhost, eth_hdr->ether_shost,
+    sizeof eth_hdr->ether_shost);
+```
+Copy our MAC address into the source host:
+```c
+memcpy(eth_hdr->ether_shost, eth_addr->ether_addr_octet,
+    sizeof eth_hdr->ether_shost);
+```
+
+Next, swap the source and destination IPv4 addresses, this is a bit easier since
+we just swap out pointers rather than needing to copy memory:
+```c
+tmp_addr = iphdr->daddr;     // save destination address.
+iphdr->daddr = iphdr->saddr; // set destination to source.
+iphdr->saddr = tmp_addr;     // set source address to previous destination.
+```
+
+Finally, we need to adjust the ICMP header's `type` and `code` fields:
+```c
+reticmp->type = // TODO: set the appropriate type.
+reticmp->code = // TODO: set the appropriate code.
+```
+
+Finally, send the packet and free the memory:
+```c
+pcap_inject(handle, retpkt, len);
+free(retpkt);
+```
+
+Now, compile the code on the `netsec-01` server using `make`, then run it on the
+attacker machine, and from hostA, try to ping the attacker. 
+
+### Lab sheet questions
+
+On your lab sheet, answer the following questions:
+
+1. Was your `ping` successful? (Hint: it should not be!)
+2. Grab a packet capture from `hostA` and examine it using `tshark` or
+   `Wireshark`. You will see that your Reply packet was received by `hostA`, but
+   it was dropped.
+
+   Examine the packet and its headers, why did `hostA` drop the packet?
+
+   _Hint_: Wireshark will highlight the problem for you, you can't miss it!
+
+3. What is the use of the field that caused the problem?
+
+### Step 3: Fixing the problem
+
+Finally, let's fix the problem from step 2. First, read the RFC for the ICMP
+headers [here](https://datatracker.ietf.org/doc/html/rfc792), specifically focus
+on the description of each field.
+
+To help you out, `util.h` contains a function called `chksum` that computes the
+required value over a header, starting from the start of header. However, it
+requires us to pass it the pointer as to pointer to two bytes, instead of a
+pointer to a header.
+
+For example, to use `chksum` over the `reticmp` structure from before, we would
+do something like:
+```c
+chksum((uint16_t*)reticmp, len - sizeof *eth_hdr - sizeof *iphdr);
+```
+
+Note that we need to apply this function on all the bytes of the ICMP message,
+include the random data at the end, which is why we use `len - sizeof *eth_hdr -
+size *iphdr`.
+
+Now, before you send the packet, recompute that field, set it in the ICMP
+header, and then send the packet (make sure to do what the RFC above tells you
+to do before the computation). Your code would look something like:
+```c
+// Do something from the RFC
+reticmp->/*field name*/ = chksum((uint16_t*)reticmp, len - sizeof *eth_hdr - sizeof *iphdr);
+```
+
+{:.highlight}
+Yes the name of the function in `util.h` tells you exactly what you are looking
+for!
+
+Finally, we need to do the same for the IPv4 header, you can reuse the same
+process as above, only replace `reticmp` with `iphdr`. However, we only need to
+do it over the header itself, not the rest of the protocols, so it would look
+like:
+```c
+// do something similar to above from the RFC
+iphdr->/*field name*/ = chksum((uint16_t*)iphdr, sizeof *iphdr);
+```
+
+Once that is done, recompile and test again, you should see something like the
+following:
+  ```sh
+  ┌──(root㉿attacker)-[/volumes/src/ping]
+  └─# ./ping.bin $(cat /sys/class/net/eth0/address)
+  [LOG:ping.c:main:75] ./ping.bin (37): Found device: eth0
+  [LOG:ping.c:main:103] Running ping.bin with filter icmp and (not ip src 10.10.0.10) and (not ether src 02:42:0a:0a:00:0a)
+  ```
+and from hostA
+  ```sh
+  ┌──(root㉿hostA)-[/]
+  └─# ping -c2 attacker
+  PING attacker (10.10.0.10) 56(84) bytes of data.
+  64 bytes from attacker.local-net (10.10.0.10): icmp_seq=1 ttl=64 time=6.30 ms
+  64 bytes from attacker.local-net (10.10.0.10): icmp_seq=2 ttl=64 time=4.62 ms
+
+  --- attacker ping statistics ---
+  2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+  rtt min/avg/max/mdev = 4.623/5.463/6.304/0.840 ms
+  ```
+
+# 2. Disconnecting the two hosts
 
 # 3. Man in the Middle
 
