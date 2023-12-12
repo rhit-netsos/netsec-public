@@ -431,5 +431,95 @@ and from hostA
 
 # 2. Disconnecting the two hosts
 
+## Phase one: Understanding the ARP cache
+
+We would like to first understand the behavior of the ARP cache at a host. We
+will start with a simple experiment and packet capture.  Spin up your docker
+environment using `docker compose up -d` then grab three terminals, two on
+`hostA` and one on `hostB`.
+
+First, let's check out the content of the ARP table on each container. Run the
+following command on each host and check that the content of the ARP table are
+empty.
+
+  ```sh
+  (hostA) $ arp -a -n
+  ```
+
+You should not see anything in the table on either host. If there is anything in
+the table, you can flush it using `ip -s -s neigh flush all`.
+
+Starting from an empty ARP table, let's first ping `hostA` from `hostB`, while
+at the same time capturing traffic on `hostA`, as follows:
+
+  ```sh
+  (hostA) $ tcpdump -i eth0 arp or icmp -w /volumes/phaseone.pcap
+  ```
+and then from another terminal on `hostA`,
+  ```sh
+  (hostA) $ ping -c1 hostB
+  ```
+
+After the `ping` is successful, stop `tcpdump` and look at the packet capture.
+For this to make sense, please do not let `tcpdump` run for long after the
+`ping` stops, otherwise it will skew the results.
+
+Check the content of the ARP cache on both `hostA` and `hostB` using `arp -a
+-n`.
+
+### Lab sheet questions
+
+By examining the content of the ARP caches on `hostA` and `hostB`, and looking
+at the packet capture, answer the following questions:
+
+1. How many ARP request were sent from `hostA` to `hostB`?
+2. What are the content of the caches on both `hostA` and `hostB`?
+3. Based on your observation, what did `hostB` do when it received the ARP
+   request from `hostA`?
+4. Describe in a few sentence the steps taken by `hostB` when it received a
+   request from `hostA` for its MAC address.
+5. Based on your observations, assuming ARP caches are empty, what can a
+   malicious host do to poison the ARP table of a host on the network?
+
+## Phase two: Forging requests
+
+Coming soon.
+
+<!--
+Our goal now is experiment with happens when a host on the network sends
+unsolicited ARP requests for a fake IPv4 address that it doesn't own. Our first
+goal for the attacker is to convince `hostA` that it is (i.e., the attacker)
+`hostB`, by creating a fake mapping in `hostA`'s ARP cache that maps `hostB`'s
+IPv4 to `attacker`'s MAC address.
+
+We would like to investigate the impact of sending forged ARP requests in two
+cases:
+  1. The ARP cache on our victim (i.e., `hostA`) is empty.
+  2. The ARP cache on our victim (i.e., `hostA`) is already populated.
+
+### Lab sheet questions
+
+1. Describe the experiment that you would like to setup to evaluate the impact
+   of forged ARP requests. Your experiment must be able to address the following 
+   requirements:
+   - Use appropriate packet captures to show the impact of ARP requests forged
+     from the attacker to `hostA`.
+   - Show the impact of the forged request on the ARP cache under different
+     scenarios.
+   - Analyze if and when the attack might be successful, and what happens if
+     `hostB` starts communicating with `hostA` all of a sudden.
+
+{:.highlight}
+Once you have designed your experiment, please check in with your instructor
+that your setup is able to address all the specifications above.
+
+### Sending forged requests
+
+I have provided you with starter code to forge `ARP` requests, you can find it
+under `lab2/volumes/src/phase_two` in the labs repository.
+-->
+
 # 3. Man in the Middle
+
+Coming soon.
 
