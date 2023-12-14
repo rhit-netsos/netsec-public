@@ -107,6 +107,9 @@ callouts:
     title: Warning
     color: red
 
+# add support for mathjax
+math: mathjax
+
 # my own links
 dev_links:
   gh_site_repo: https://github.com/rhit-netsos/netsec-public
