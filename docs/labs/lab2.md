@@ -224,7 +224,7 @@ Grab two terminals, one connected to `hostA` and another connected to
   1 packets transmitted, 0 received, 100% packet loss, time 0ms
   ```
 
-First thing, let's detect an ICMP Echo request on the `attacker`'s machine. 
+First thing, let's detect an ICMP Echo request on the `attacker`'s machine.
 
 ### Step 1: Print the receipt of an ICMP Echo request
 
@@ -349,7 +349,7 @@ free(retpkt);
 ```
 
 Now, compile the code on the `netsec-01` server using `make`, then run it on the
-attacker machine, and from hostA, try to ping the attacker. 
+attacker machine, and from hostA, try to ping the attacker.
 
 ### Lab sheet questions
 
@@ -499,7 +499,7 @@ cases:
 ### Lab sheet questions
 
 1. Describe the experiment that you would like to setup to evaluate the impact
-   of forged ARP requests. Your experiment must be able to address the following 
+   of forged ARP replies. Your experiment must be able to address the following
    requirements:
    - Use appropriate packet captures to show the impact of ARP replies forged
      from the attacker to `hostA`.
@@ -542,13 +542,49 @@ of the ARP cache under these scenarios:
 I have provided you with starter code to forge `ARP` replies, you can find it
 under `lab2/volumes/src/phase_two` in the labs repository.
 
-Add your code to the `send arp_replies` function at the top of the file. The
+Add your code to the `send_arp_replies` function at the top of the file. The
 code assumes the following naming convention:
 
   - `target` is the machine you are trying to trick, i.e., the target of the ARP
     cache poisoning.
   - `victim` is the machine you are trying to impersonate, i.e., the one you are
     trying to create a fake mapping for.
+
+
+### Running the exectuable
+
+Since everyone's IP addresses are different, `arp_poison` accepts three command
+line arguments:
+  1. The MAC address of the interface on which it is running.
+  2. The IPv4 address of the victim host.
+  3. The IPv4 address of the target host.
+
+You don't have to memorize the MAC address for you interface (you can get it
+from `ip a`), we will read through the command line. So to run our executable
+where the victim is 10.10.0.5 and the target is 10.10.0.4, we do:
+
+  ```shell
+  $ ./arp_poison.bin $(cat /sys/class/net/eth0/address) 10.10.0.5 10.10.0.4
+  ```
+
+Remember to replace your subnet accordingly. Feel free to put this in a script
+to avoid typing too much, something like `run_poison.sh`:
+
+  ```sh
+  #!/bin/bash
+
+  # IPv4 address of host you are trying to impersonate.
+  VICTIM_IP="10.10.0.5"
+
+  # IPv4 address of host you are trying to trick.
+  TARGET_IP="10.10.0.4"
+
+  # Run the attack
+  ./arp_poison.bin $(cat /sys/class/net/eth0/address) $VICTIM_IP $TARGET_IP
+  ```
+
+Then, mark it as executable using `chmod +x ./run_poison.sh` and run it using
+`./run_poison.sh`.
 
 ### Success criteria
 
@@ -596,10 +632,10 @@ way to set yourself up, start from the directory `volumes/src/`
   ```sh
   (netsec-01:netsec-labs-user/lab2/volumes/src) $ mkdir phase_three
   (netsec-01:netsec-labs-user/lab2/volumes/src) $ cp phase_two/makefile phase_three/
-  (netsec-01:netsec-labs-user/lab2/volumes/src) $ cp phase_two/send_reply.c phase_three/send_request.c
+  (netsec-01:netsec-labs-user/lab2/volumes/src) $ cp phase_two/arp_poison.c phase_three/
   ```
 
-Then edit the file in `phase_three/send_request.c` to send requests instead of
+Then edit the file in `phase_three/arp_poison.c` to send requests instead of
 replies. You do not need to edit the `makefile` as it detects your source files
 automatically.
 
@@ -637,9 +673,8 @@ they can help us impersonate `hostB`. We will use the same experimental setup as
 in the first two phases, except that we will be sending gratuitous ARP packets.
 
 I suggest you copy your code from **phase two** a new directory (call it
-`phase_four`) and rename your file to `send_gratuitous.c`. It is better to start
-from send replies since a gratuitous packet is slight modification of reply
-packet.
+`phase_four`). It is better to start from send replies since a gratuitous packet
+is slight modification of reply packet.
 
 An ARP gratuitous message is an ARP reply with the following characteristics:
 
@@ -662,8 +697,8 @@ Based on your observations, answer the following questions on the lab questions
 sheet.
 
   1. Based on your observations, describe the behavior of `hostA` when it
-     receives an unsolicited ARP request. Specifically, mention what happens
-     depending on the content of the ARP cache.
+     receives an unsolicited ARP gratuitous packet. Specifically, mention what
+     happens depending on the content of the ARP cache.
 
   2. When would such an attack (using ARP gratuitous) be successful?
 
@@ -696,7 +731,7 @@ To achieve that, we must do the following:
      by the legitimate ones.
 
 In this lab, we will intercept traffic between two `netcat` applications running
-on `hostA` and `hostB`, and play a little prank. 
+on `hostA` and `hostB`, and play a little prank.
 
 ## Step 1: Exploring `netcat`
 
@@ -810,7 +845,7 @@ For our specific purposes, here's what we want to do:
      the content of those messages to our liking.
 
   4. Send the packet back on the wire (use `pcap_inject`).
- 
+
 Here's my breakdown of the approach (you don't have to stick to it):
 
   1. Create a directory under `volumes/src/`, call it `netcat`.
@@ -919,7 +954,7 @@ Of course, you'd need to check for the flags you care about.
 If the packet contains data, then we need a way to access that data, and also
 know how large it is. This will require us to peek a bit into the IPv4 header
 and the TCP header. As we will see later in class, TCP headers can have varying
-length options fields. This makes access the data a bit annoying. 
+length options fields. This makes access the data a bit annoying.
 
 Luckily for us, the TCP header contains a field called the "data offset", which
 tells us where the data starts, as an offset from the TCP header. Since by
@@ -939,7 +974,7 @@ data = data + tcp_hdr_len;
 ```
 
 Now, you can access the data of the TCP header. That is great, but how do I know
-when to stop reading data? Now, we need the help of the IPv4 header. 
+when to stop reading data? Now, we need the help of the IPv4 header.
 
 The IP header contains a 16-bit field called `tot_len` that represents the total
 length of the packet include the IP header, the TCP header, and the data
@@ -975,7 +1010,7 @@ but you get the gist.
 The last step we need to worry about is the checksum again (recall the ICMP
 checksum from the first task in this lab). The TCP header also contains a
 checksum field, but computing it a bit of a pain. It requires us to peek back
-into the IP header and obtain a pseudo header from there. 
+into the IP header and obtain a pseudo header from there.
 
 Here's the description from [RFC793](https://www.ietf.org/rfc/rfc793.txt):
 

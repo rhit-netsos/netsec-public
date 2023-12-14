@@ -14,4 +14,4 @@ Dec 07
 : **Prelab Released**{: .label .label-blue }[Prelab 02]({{site.baseurl}}/docs/labs/prelab2)
 
 Dec 08
-: Continue Lab 02
+: Continue Lab 03
