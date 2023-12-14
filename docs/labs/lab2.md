@@ -131,9 +131,9 @@ following `$ chmod +x <script name.sh>` to make it executable and try again.
 In the remainder of this document, I will not be using your specific prefixes
 and subnets. For example, when I refer to `hostA`, you should replace that with
 `user-hostA` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all ip addresses
+`10.10.0` as the default subnet, you should replace that in all IP addresses
 with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-ip address `10.10.0.1` with `10.11.0.1`.
+IP address `10.10.0.1` with `10.11.0.1`.
 
 # Network topology
 
@@ -239,7 +239,7 @@ step 1 under the `TODO` label.
 Note that to run `./ping.bin`, you will need to provide the MAC address of the
 interface on which you should be running. To do so, you can either write it
 manually, or you can read it from the system. Each interface's MAC address is
-store in a pseduo-filesystem on Linux under `/sys`. Specifically, if you read
+store in a pseudo-filesystem on Linux under `/sys`. Specifically, if you read
 the entry `/sys/class/net/eth0/address`, you would be accessing the MAC address
 of `eth0`.
 
@@ -756,7 +756,7 @@ called `poison.c` in there. You can copy the code from the appropriate attack
 type you created in the corresponding phase.
 
 There are plenty of ways to do this, so I will leave it to you to design it. You
-can use multiprocessing, multithreading, or simply just have one loop generate
+can use multiprocessing, multi-threading, or simply just have one loop generate
 both attack packets at the same time. But here is the gist:
 
   - Every time, we'd like to generate two packets, one to poison `hostA`'s
@@ -837,6 +837,12 @@ Here's my breakdown of the approach (you don't have to stick to it):
 
   5. Grab those packets, check their flags, modify those that need to be
      modified, and then send them back.
+
+{:.warning}
+Do not add characters to the TCP packet payload, TCP is very sensitive to
+changes in the lengths of its packets, as we will discuss later in the class.
+There will come a time where we'll have to deal with this annoyance, but it's
+not today.
 
 ### Implementation tips
 
@@ -973,36 +979,34 @@ into the IP header and obtain a pseudo header from there.
 
 Here's the description from [RFC793](https://www.ietf.org/rfc/rfc793.txt):
 
-```txt
-The checksum field is the 16 bit one's complement of the one's
-complement sum of all 16 bit words in the header and text.  If a
-segment contains an odd number of header and text octets to be
-checksummed, the last octet is padded on the right with zeros to
-form a 16 bit word for checksum purposes.  The pad is not
-transmitted as part of the segment.  While computing the checksum,
-the checksum field itself is replaced with zeros.
+    The checksum field is the 16 bit one's complement of the one's
+    complement sum of all 16 bit words in the header and text.  If a
+    segment contains an odd number of header and text octets to be
+    checksummed, the last octet is padded on the right with zeros to
+    form a 16 bit word for checksum purposes.  The pad is not
+    transmitted as part of the segment.  While computing the checksum,
+    the checksum field itself is replaced with zeros.
 
-The checksum also covers a 96 bit pseudo header conceptually
-prefixed to the TCP header.  This pseudo header contains the Source
-Address, the Destination Address, the Protocol, and TCP length.
-This gives the TCP protection against misrouted segments.  This
-information is carried in the Internet Protocol and is transferred
-across the TCP/Network interface in the arguments or results of
-calls by the TCP on the IP.
+    The checksum also covers a 96 bit pseudo header conceptually
+    prefixed to the TCP header.  This pseudo header contains the Source
+    Address, the Destination Address, the Protocol, and TCP length.
+    This gives the TCP protection against misrouted segments.  This
+    information is carried in the Internet Protocol and is transferred
+    across the TCP/Network interface in the arguments or results of
+    calls by the TCP on the IP.
 
-                 +--------+--------+--------+--------+
-                 |           Source Address          |
-                 +--------+--------+--------+--------+
-                 |         Destination Address       |
-                 +--------+--------+--------+--------+
-                 |  zero  |  PTCL  |    TCP Length   |
-                 +--------+--------+--------+--------+
+                     +--------+--------+--------+--------+
+                     |           Source Address          |
+                     +--------+--------+--------+--------+
+                     |         Destination Address       |
+                     +--------+--------+--------+--------+
+                     |  zero  |  PTCL  |    TCP Length   |
+                     +--------+--------+--------+--------+
 
-The TCP Length is the TCP header length plus the data length in
-octets (this is not an explicitly transmitted quantity, but is
-computed), and it does not count the 12 octets of the pseudo
-header.
-```
+    The TCP Length is the TCP header length plus the data length in
+    octets (this is not an explicitly transmitted quantity, but is
+    computed), and it does not count the 12 octets of the pseudo
+    header.
 
 To avoid dealing with this fugliness, I have provided you with a TCP header
 checksum calculation routine, you can find that under the guides section of this
