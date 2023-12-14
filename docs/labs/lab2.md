@@ -307,7 +307,7 @@ Next, copy the packet received into the newly created one:
 Now, let's start editing, it is useful to grab the headers, so let's just do
 exactly that:
   ```c
-  eth_hdr = (struct ether_header*)pkt;
+  eth_hdr = (struct ether_header*)retpkt;
   iphdr =     // TODO: Add code to get the IPv4 header IN THE NEW PACKET.
   reticmp =   // TODO: Add code to the ICMP header IN THE NEW PACKET.
   ```
