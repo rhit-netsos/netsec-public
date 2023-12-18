@@ -1044,9 +1044,66 @@ Here's the description from [RFC793](https://www.ietf.org/rfc/rfc793.txt):
     header.
 
 To avoid dealing with this fugliness, I have provided you with a TCP header
-checksum calculation routine, you can find that under the guides section of this
-website. Feel free to port it directly into your code, or write your own if
-bit mangling is what you're into.
+checksum calculation routine below, you just have to use to set the checksum for
+the TCP header by passing a pointer to the TCP header as well as a pointer to
+the IPv4 header.
+
+```c
+struct pseudo_tcp_hdr {
+  uint32_t saddr;
+  uint32_t daddr;
+  uint8_t zero;
+  uint8_t ptcl;
+  uint16_t tcp_len;
+};
+
+uint16_t compute_tcp_checksum(struct tcphdr *tcp, struct iphdr *ip) {
+  unsigned long cksum = 0;
+  uint16_t tcplen = ntohs(ip->tot_len) - (ip->ihl * 4);
+  struct pseudo_tcp_hdr pseudohdr;
+  uint16_t *hdr;
+  uint32_t len;
+
+  // make sure this is zero.
+  tcp->check = 0;
+
+  // fill up the pseudo header
+  pseudohdr.saddr = ip->saddr;
+  pseudohdr.daddr = ip->daddr;
+  pseudohdr.zero = 0;
+  pseudohdr.ptcl = ip->protocol;
+  pseudohdr.tcp_len = htons(tcplen);
+
+  // start over the pseudoheader
+  len = sizeof pseudohdr;
+  hdr = (uint16_t *)(&pseudohdr);
+  while(len > 1) {
+    cksum += *hdr++;
+    len -= sizeof(uint16_t);
+  }
+
+  // pseudo header is always 96 bits or 24 bytes, which means len is 0 now.
+  len = tcplen;
+  hdr = (uint16_t *)tcp;
+  while(len > 1) {
+    cksum += *hdr++;
+    len -= sizeof(uint16_t);
+  }
+
+  if(len)
+    cksum += *(u_char *)hdr;
+
+  cksum = (cksum >> 16) + (cksum & 0xffff);
+  cksum += (cksum >> 16);
+
+  return (uint16_t)~cksum;
+}
+```
+
+{:.warning}
+Reglardless of whether you modify the packet or not, you will need to recompute
+the checksums for both the IPv4 header and the TCP header, so make sure to do
+that before you send any packet on the network.
 
 ### Success criteria
 
