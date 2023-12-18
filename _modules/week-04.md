@@ -3,12 +3,12 @@ title: "Week 04: Layers 3 and 4"
 ---
 
 Dec 18
-: IP Routing
+: IP Addressing
 : Continue Lab 2
   : [Lab2]({{site.baseurl}}/docs/labs/lab2) [Question sheet]({{site.baseurl}}/assets/labs/lab2.pdf)
 
 Dec 19
-: ICMP Redirection and Attacks
+: IP Routing and ICMP Messages
 : Continue Lab 2
   : [Lab2]({{site.baseurl}}/docs/labs/lab2) [Question sheet]({{site.baseurl}}/assets/labs/lab2.pdf)
 
