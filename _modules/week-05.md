@@ -4,7 +4,7 @@ title: "Week 05: Transport Control Protocol"
 
 Jan 08
 : [Introduction to TCP]({{site.baseurl}}/docs/concepts/tcp)
-  : [Slides]()   [Question sheet]()
+  : [Slides]()  [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
 
 Jan 09
 : To be announced
