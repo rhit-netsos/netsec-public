@@ -4,17 +4,16 @@ title: "Week 05: Transport Control Protocol"
 
 Jan 08
 : [Introduction to TCP]({{site.baseurl}}/docs/concepts/tcp)
-  : [Slides]()  [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
 
 Jan 09
-: To be announced
-  : Material to be added
+: Class cancelled.
 
 Jan 11
-: To be announced
-  : Material to be added
+: [TCP Session Haijacking and Reverse Shells]({{site.baseurl}}/docs/concepts/reverse_shell)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/revshell.pdf)
 
 Jan 12
-: To be announced
-  : Material to be added
+: TBA
+
 
