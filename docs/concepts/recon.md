@@ -45,7 +45,7 @@ To start with this concept lab, login to the class server, and navigate to your
   (class-server) $ git pull upstream main
   ```
 
-A folder called `recon` should show up in your directory, that is where you
+A folder called `udp` should show up in your directory, that is where you
 will do most of your lab.
 
 ## Patching the docker file
@@ -60,7 +60,7 @@ subnet, it will try to extract those on its own and print out your subnet (it
 is the same on as the one announced on the Moodle page). Also, it now generates
 scripts for you to connect to your hosts quickly.
 
-To do so, in the `recon` directory, run the patch script:
+To do so, in the `udp` directory, run the patch script:
 
   ```sh
   (class-server) $ ./patch_docker_compose.sh

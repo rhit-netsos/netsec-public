@@ -211,7 +211,7 @@ input.txt`, this will create an empty file called `input.txt`.
 Then, run the `simple_loop.bin` with the following command:
 
 ```sh
-$ ./simple_loop.bin 0<
+$ ./simple_loop.bin 0< input.txt
 ```
 
 Based on the value of the process id, examine the file mappings for the newly

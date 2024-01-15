@@ -3,8 +3,8 @@ title: "Week 06: Network Segmentation"
 ---
 
 Jan 15
-: To be announced
-  : Material to be added
+: [Lab 3]({{site.baseurl}}/docs/labs/lab3)
+  : No question sheet necessary.
 
 Jan 16
 : To be announced
