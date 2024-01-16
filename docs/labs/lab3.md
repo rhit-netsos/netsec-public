@@ -245,10 +245,10 @@ if(iphdr->protocol == IPPROTO_TCP) {
   }
 }
 ```
-This piece of code check if a TCP packet has been detected, and then computes
+This piece of code checks if a TCP packet has been detected, and then computes
 its checksum value. However, if the packet contains both `PUSH` and `ACK`
 flags, we will check for the specific trigger using `is_triggered` and then
-launch the attacker using `hijack_tcp_connection`.
+launch the attack using `hijack_tcp_connection`.
 
 The function `is_triggered` and `hijack_tcp_connection` can be found in the
 `hijack_conn.c` file. This is where you will add your code. I have already
@@ -256,6 +256,45 @@ provided you with a skeleton of what you need to do along with a bunch of
 `TODO` statements where you need to add your edits.
 
 Start by writing your own `trigger` function and then launch the attack by
-modifying the `hijack_tcp_connection` function.
+modifying the `hijack_tcp_connection` function. Here is one possible plan of
+attack.
+
+1. Write your trigger function and make sure it is working correctly. I would
+   do that by adding a simple print statement in the `hijack_tcp_connection`
+   function, which would do nothing else.
+
+   To pretty much cancel out the `hijack_tcp_connection` function, simple add a
+   print statement followed by `return 0;`, making the rest of the code dead.
+
+2. Then read the code in `hijack_tcp_connection` and understand what it is
+   trying to do. Make sure to ask any questions as you go along with it.
+
+3. Create a plan for the different fields that you must fill out in
+   `hijack_tcp_connection`. Please do not try to write them out and then think
+   about them. Make sure you understand what each field is doing and what its
+   appropriate value would be.
+
+4. Launch your experiment and test things out.
+
+   {:.warning}
+   Make sure to delete the file `/volumes/pwnd.txt` between runs of the
+   experiment to make sure that what you are seeing is the result of the
+   current experiment, and not something done before.
+
+# 3. Establish a reverse shell
+
+If you have done part 2 if this lab, this should be a slight modification on
+it, based on the experiments you have done in the reverse shell concept lab.
+Your attack in this experiment would be successful if you can have a server
+shell running on the attacker machine, from which you can execute any arbitrary
+command.
+
+Once your attack is successful, please take a screenshot showing the server
+shell running on the attacker for submission.
+
+# Submission
+
+Please submit your source code along with screenshots of your successful attack
+to Gradescope.
 
 
