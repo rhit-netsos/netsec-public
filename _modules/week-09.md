@@ -1,5 +1,5 @@
 ---
-title: "Week 09: Virtual LANs"
+title: "Week 09: VPN"
 ---
 
 Feb 05

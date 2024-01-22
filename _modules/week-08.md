@@ -1,5 +1,5 @@
 ---
-title: "Week 08: Virtual Private Networks"
+title: "Week 08: Firewalls Cont. and VPN"
 ---
 
 Jan 29

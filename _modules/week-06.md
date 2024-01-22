@@ -1,20 +1,21 @@
 ---
-title: "Week 06: Network Segmentation"
+title: "Week 06: TCP wrapup and Network Recon"
 ---
 
 Jan 15
+: **Lab 3 Released**{:.label .label-blue}
 : [Lab 3]({{site.baseurl}}/docs/labs/lab3)
   : No question sheet necessary.
 
 Jan 16
-: To be announced
-  : Material to be added
+: Finish up [Session Hijacking]({{site.baseurl}}/docs/concepts/reverse_shell)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/revshell.pdf)
 
 Jan 18
-: To be announced
-  : Material to be added
+: Finish up [Network Recon]({{site.baseurl}}/docs/concepts/recon)
+  : Submit code via gradescope
 
 Jan 19
-: To be announced
-  : Material to be added
+: Continue [Lab 3]({{site.baseurl}}/docs/labs/lab3)
+  : Submit code via gradescope
 

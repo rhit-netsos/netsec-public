@@ -1,5 +1,5 @@
 ---
-title: "Week 10: Onion Routing"
+title: "Week 10: Onion Routing and Projects"
 ---
 
 Feb 12
