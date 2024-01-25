@@ -13,7 +13,7 @@ Jan 23
 Jan 25
 : **New concept lab**{:.label .label-blue}
 : [Introduction to firewalls]({{site.baseurl}}/docs/concepts/nftables)
-  : [Question sheet]({{site.baseurl}}/assets/labs/nftables.pdf)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/nftables.pdf)
 
 Jan 26
 : To be announced
