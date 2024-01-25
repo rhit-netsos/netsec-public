@@ -7,12 +7,13 @@ Jan 22
   : Submit code via gradescope
 
 Jan 23
-: Introduction to `iptables`
-  : Material to be added
+: Finish up [Lab 3]({{site.baseurl}}/docs/labs/lab3)
+  : Submit code via gradescope
 
 Jan 25
-: To be announced
-  : Material to be added
+: **New concept lab**{:.label .label-blue}
+: [Introduction to firewalls]({{site.baseurl}}/docs/concepts/nftables)
+  : [Question sheet]({{site.baseurl}}/assets/labs/nftables.pdf)
 
 Jan 26
 : To be announced
