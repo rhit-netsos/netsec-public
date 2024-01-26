@@ -16,6 +16,7 @@ Jan 25
   : [Question sheet]({{site.baseurl}}/assets/concepts/nftables.pdf)
 
 Jan 26
-: To be announced
-  : Material to be added
+: **New concept lab**{:.label .label-blue}
+: [Introduction to firewalls rules]({{site.baseurl}}/docs/concepts/nfrules)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/nfrules.pdf)
 
