@@ -3,7 +3,7 @@ title: "Week 08: Firewalls Cont. and VPN"
 ---
 
 Jan 29
-: Continue [Firewall concept lab]()({{site.baseurl}}/docs/concepts/nftables)
+: Continue [Firewall concept lab]({{site.baseurl}}/docs/concepts/nftables)
   : [Question sheet]({{site.baseurl}}/assets/concepts/nftables.pdf)
 
 Jan 30
