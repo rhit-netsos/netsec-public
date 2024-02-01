@@ -35,6 +35,7 @@ At the end of this concept lab, you should be able to:
 - Define how a stateful firewall works in the context of a Linux box.
 - Experiment with different stateful rules that are based on network
   connections, rather than individual packets.
+
 <!--
 - Use network address translation to access a subnetwork that was previously
   not accessible.
