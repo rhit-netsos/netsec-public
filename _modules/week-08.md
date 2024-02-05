@@ -16,6 +16,6 @@ Feb 01
   : [Question sheet]({{site.baseurl}}/assets/concepts/statefulfw.pdf)
 
 Feb 02
-: To be announced
-  : Material to be added
+: Finish up [statefull firewalls]({{site.baseurl}}/docs/concepts/statefulfw)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/statefulfw.pdf)
 
