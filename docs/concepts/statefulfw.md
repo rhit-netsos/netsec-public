@@ -332,8 +332,8 @@ change the rule. Make sure your default action in this chain to `accept`.
 For the rules in this case, use the following in your script:
 
 ```sh
-add rule fw_tbl fwd_chain ct established counter
-add rule fw_tbl fwd_chain ct established ct direction original counter
+add rule fw_tbl fwd_chain ct state established counter
+add rule fw_tbl fwd_chain ct state established ct direction original counter
 ```
 
 Next, install the firewall rules and then start a `netcat` session from any of
