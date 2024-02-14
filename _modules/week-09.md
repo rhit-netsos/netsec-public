@@ -11,10 +11,10 @@ Feb 06
   : [Question sheet]({{site.baseurl}}/assets/labs/lab4.pdf)
 
 Feb 08
-: To be announced
-  : Material to be added
+: Continue [lab 4]({{site.baseurl}}/docs/labs/lab4)
+  : [Question sheet]({{site.baseurl}}/assets/labs/lab4.pdf)
 
 Feb 09
-: To be announced
-  : Material to be added
+: Continue [lab 4]({{site.baseurl}}/docs/labs/lab4)
+  : [Question sheet]({{site.baseurl}}/assets/labs/lab4.pdf)
 
