@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Lab repo access
-last_modified_date: Friday Nov 24 23:34:40 2023
-current_term: Winter 2023-24
+last_modified_date: 2024-12-02 14:50
+current_term: Winter 2024-25
 nav_order: 10
 parent: Guides
 description: >-
