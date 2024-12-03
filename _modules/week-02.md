@@ -2,6 +2,7 @@
 title: "Week 02: ARP Cache Poisoning"
 ---
 
+<!--
 Dec 04
 : Continue Lab 01
 
@@ -15,3 +16,4 @@ Dec 07
 
 Dec 08
 : Continue Lab 03
+-->

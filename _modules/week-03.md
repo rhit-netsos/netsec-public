@@ -2,6 +2,7 @@
 title: "Week 03: Wrapping up Layer 2"
 ---
 
+<!--
 Dec 11
 : Lab 1 Summary and Briefing
   : [slides]({{site.baseurl}}/assets/slides/lab1_summary.pdf)
@@ -16,3 +17,4 @@ Dec 14
 
 Dec 15
 : Continue Lab 02
+-->

@@ -2,6 +2,7 @@
 title: "Week 04: Layers 3 and 4"
 ---
 
+<!--
 Dec 18
 : IP Addressing
   : [slides]({{site.baseurl}}/assets/slides/ip_intro.pdf) [Worksheet]({{site.baseurl}}/assets/worksheets/ip_intro_sheet.pdf)
@@ -21,3 +22,4 @@ Dec 21
 Dec 22
 : **No class, enjoy the break!**{: .label .label-blue}
   : **Lab 2 Due**{: .label .label-red}
+-->

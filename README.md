@@ -9,7 +9,8 @@ seo:
 ---
 
 # Introduction to Network Security
-## Rose-Hulman Institute of Technology, Winter 2023-24
+
+## Rose-Hulman Institute of Technology, Winter 2024-25
 
 Welcome to CSSE490: Introduction to Network Security at RHIT!
 
@@ -48,10 +49,16 @@ on day 1:
     essential skills like navigating directories, copying and moving files,
     `grep`, and compiling and running programs are crucial for your success.
 3. __Version Control__<br>
+    This term, we will be transitioning to use GitHub Classroom for lab
+    distribution and submission. Each lab/concept lab will have an assignment
+    link for you to accept the lab and obtain a fork of the lab starter code
+    repository.
+    <!--
     Create an __empty private__ repository (anywhere you prefer, most use
     [Github](https://github.com)). Follow the steps in the
     [tutorials](docs/guides/guides) page to get the content of the first lab and
     test connectivity.
+    -->
 4. __Connectivity__<br>
     Throughout the class, we will be working on dedicated machines that would
     allow us to run risky experiments. Follow the steps in the

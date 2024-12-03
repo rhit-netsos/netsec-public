@@ -37,7 +37,7 @@ permalink: pretty
 # These will appear at the top right next to the search bar.
 aux_links:
   Gradescope:
-    - 'https://gradescope.com'
+    - 'https://www.gradescope.com/courses/920689'
   Network Security Research:
     - 'https://netsos.csse.rose-hulman.edu'
 
@@ -117,7 +117,7 @@ dev_links:
 
 # footer content
 footer_content: >-
-  Copyright &copy; 2023 Rose-Hulman Institute of Technology.
+  Copyright &copy; 2024 Rose-Hulman Institute of Technology.
 
 # Footer last edited timestamp
 last_edit_timestamp: true

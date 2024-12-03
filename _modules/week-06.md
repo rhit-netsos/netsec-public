@@ -2,6 +2,7 @@
 title: "Week 06: TCP wrapup and Network Recon"
 ---
 
+<!--
 Jan 15
 : **Lab 3 Released**{:.label .label-blue}
 : [Lab 3]({{site.baseurl}}/docs/labs/lab3)
@@ -18,4 +19,4 @@ Jan 18
 Jan 19
 : Continue [Lab 3]({{site.baseurl}}/docs/labs/lab3)
   : Submit code via gradescope
-
+-->

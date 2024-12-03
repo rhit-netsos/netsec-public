@@ -2,6 +2,7 @@
 title: "Week 08: Firewalls Cont. and VPN"
 ---
 
+<!--
 Jan 29
 : Continue [Firewall concept lab]({{site.baseurl}}/docs/concepts/nftables)
   : [Question sheet]({{site.baseurl}}/assets/concepts/nftables.pdf)
@@ -18,4 +19,4 @@ Feb 01
 Feb 02
 : Finish up [statefull firewalls]({{site.baseurl}}/docs/concepts/statefulfw)
   : [Question sheet]({{site.baseurl}}/assets/concepts/statefulfw.pdf)
-
+-->

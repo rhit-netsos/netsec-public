@@ -1,10 +1,10 @@
 require 'date'
 require 'yaml'
 
-start_date = Date.new(2024, 01, 8)
-end_date = Date.new(2024, 02, 16)
+start_date = Date.new(2024, 12, 03)
+end_date = Date.new(2025, 02, 16)
 
-allowed_days_of_week = [1, 2, 4, 5]
+allowed_days_of_week = [2, 4]
 
 day_list = []
 
