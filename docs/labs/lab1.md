@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Lab 1
-last_modified_date: Wed 29 Nov 2023 04:42:25 PM EST
-current_term: Winter 2023-24
+last_modified_date: 2024-12-03 12:14
+current_term: Winter 2024-25
 nav_order: 10
 parent: Labs
 description: >-
@@ -50,17 +50,16 @@ After completing this lab, you should be able to:
 
 # Getting the config
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4742069)
+to accept the assignment and obtain your own fork of the lab repository.
 
-  ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
-  ```
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
 
-A folder called `lab1` should show up in your directory, that is where you will
-do most of your lab.
-
+<!--
 ## Patching the docker file
 
 As we did in the prelab, you will need to patch the `docker-compose.yml` file to
@@ -83,6 +82,7 @@ and subnets. For example, when I refer to `hostA`, you should replace that with
 `10.10.0` as the default subnet, you should replace that in all ip addresses
 with your own subnet. For example, if your subnet is `10.11.0`, then replace the
 ip address `10.10.0.1` with `10.11.0.1`.
+-->
 
 # Network topology
 
@@ -93,10 +93,6 @@ directly. The machines are:
 1. `hostA` with ip address `10.10.0.4`
 2. `hostB` with ip address `10.10.0.5`
 3. `attacker` with ip address `10.10.0.13`
-
-{:.highlight}
-Recall that yours will look slightly different based on your username and
-subnet.
 
 ![topology]({{site.baserul}}/assets/images/lab1/topology.jpg}
 
@@ -222,10 +218,10 @@ using `mkdir data/` and change into it (`cd data/`).
 Then in there, grab a copy of the `pcap` file from the server using:
 
   ```shell
-  (local) $ rsync -e ssh -Paz 'netsec:~/netsec-labs-user/lab1/volumes/*.pcap' .
+  (local) $ rsync -e ssh -Paz 'netsec:~/PATH_TO_YOUR_LAB_REPO/volumes/*.pcap' .
   ```
 
-Note that you will need to replace `~/netsec-labs-user/lab1/volumes/` with the
+Note that you will need to replace `~/PATH_TO_YOUR_LAB_REPO/lab1/volumes/` with the
 path to your `volumes` directory on the class server.
 
 This will sync all `pcap` files on the server with the ones you have locally,
@@ -238,7 +234,7 @@ you put it in a script and then call the script. Create a script, let's call
   ```shell
   #!/usr/bin/env bash
 
-  rsync -e ssh -Paz 'netsec:~/netsec-labs-user/lab1/volumes/*.pcap' .
+  rsync -e ssh -Paz 'netsec:~/PATH_TO_YOUR_LAB_REPO/volumes/*.pcap' .
   ```
 
 Make the script executable using `chmod +x ./fetch_pcaps.sh` and then you can

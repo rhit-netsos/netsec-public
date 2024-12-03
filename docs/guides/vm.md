@@ -164,6 +164,17 @@ server.
 
 # Customization
 
+I have set up all of the virtual machines with some customization options to
+help make your life easier in the class. You will be running `zsh` with a few
+plugins to help development and testing.
+
+I have added custom configuration scripts for `neovim`, `tmux`, and `zsh` that
+get loaded by default. If you wish to turn off any of thease features, then
+please let me know and I can reset your environment.
+
+I have also added a bunch of aliases that will prove to be useful when working
+with docker. We will reference those as we go along the labs.
+
 <!-- TODO: Add stuff about the tmux files and neovim/vim configurations. -->
 
 <!--

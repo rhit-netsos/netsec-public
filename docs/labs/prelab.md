@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Prelab
-last_modified_date: Tue 28 Nov 2023 12:25:46 PM EST
-current_term: Winter 2023-24
+last_modified_date: 2024-12-03 12:24
+current_term: Winter 2024-25
 nav_order: 1
 parent: Labs
 description: >-
@@ -62,6 +62,16 @@ so I can take a look.
 
 ## Get the lab
 
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4742081)
+to accept the assignment and obtain your own fork of the lab repository.
+
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
+
+<!--
 In your labs repository, get the latest updates from the class repo as follows:
 
 First, make sure all you changes have been committed and pushed to your private
@@ -133,9 +143,9 @@ services:
   # command:
   #   bash -c "bash /volmes/check_config.sh && tail -f /dev/null"
   #
-  user-hostA:
+  hostA:
     image: netsos/rhit-netsec:latest
-    container_name: user-hostA
+    container_name: hostA
     tty: true
     cap_add:
       - ALL
@@ -147,9 +157,9 @@ services:
     command:
       bash -c "bash /volumes/check_config.sh && tail -f /dev/null"
 
-  user-hostB:
+  hostB:
     image: netsos/rhit-netsec:latest
-    container_name: user-hostB
+    container_name: hostB
     tty: true
     cap_add:
       - ALL
@@ -170,20 +180,42 @@ networks:
       config:
         - subnet: 10.11.1.0/24
 ```
+-->
+
+# Generating your `.env` file
+
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
+
+  ```shell
+  $ ./gen_env_file.sh
+  ```
+
+If run correctly, three files will be generated:
+
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
+
+2. `connect_hostA.sh` a utility script to quickly connect to `hostA`.
+
+3. `connect_hostB.sh` a utility script to quickly connect to `hostB`.
 
 # Spin up the containers
 
-Now you are ready to spin up the containers for this prelab. In the `prelab/`
-directory, spin up the environment using:
+Now you are ready to spin up the containers for this prelab. In the prelab
+repository direcotyr, spin up the environment using:
 
   ```shell
   $ docker compose up -d
   ...
   [+] Running 3/3
-   ✔ Network user-local-net  Created          0.1s
-   ✔ Container user-hostB    Started          0.1s
-   ✔ Container user-hostA    Started          0.1s
+   ✔ Network local-net  Created          0.1s
+   ✔ Container hostB    Started          0.1s
+   ✔ Container hostA    Started          0.1s
   ```
+
+Alternatively, you can also use `dcupd` as an alias to `docker compose up -d`.
 
 If you see the output, your environment is fully setup and are running. If you
 run into any issues, then please contact me as soon as possible.
@@ -208,8 +240,8 @@ If things look good, check on your running containers as follows:
 ```shell
 $ docker compose ps
 NAME         IMAGE                       COMMAND                                                          SERVICE      CREATED         STATUS         PORTS
-user-hostA   netsos/rhit-netsec:latest   "bash -c 'bash /volumes/check_config.sh && tail -f /dev/null'"   user-hostA   4 minutes ago   Up 4 minutes
-user-hostB   netsos/rhit-netsec:latest   "bash -c 'bash /volumes/check_config.sh && tail -f /dev/null'"   user-hostB   4 minutes ago   Up 4 minutes
+hostA   netsos/rhit-netsec:latest   "bash -c 'bash /volumes/check_config.sh && tail -f /dev/null'"   hostA   4 minutes ago   Up 4 minutes
+hostB   netsos/rhit-netsec:latest   "bash -c 'bash /volumes/check_config.sh && tail -f /dev/null'"   hostB   4 minutes ago   Up 4 minutes
 ```
 
 If all looks good, move on to the next step.
@@ -220,14 +252,14 @@ Next, let's ssh into one of the containers to make sure things are okay. In your
 `prelab` directory, use the following:
 
   ```shell
-  $ docker container exec -it user-hostA /bin/bash
+  $ ./connect_hostA.sh
   ```
 
-This will drop you into a shell on the `user-hostA` container. **You will be
-logged in as root** so be careful in what you are doing. However, everything you
-do will only impact your container!
+This will drop you into a shell on the `hostA` container. **You will be
+logged in as the user `netsec`**, but you have passwordless `sudo` privileges
+on the container.
 
-Try the same on `user-hostB` to make sure that it is up as well.
+Try the same on `hostB` to make sure that it is up as well.
 
 ## Shared volumes
 
@@ -266,11 +298,11 @@ been set up correctly.
 
 ## Checking on hostA
 
-Login to the `user-hostA` container as we have showed above. Then from there,
+Login to the `hostA` container as we have showed above. Then from there,
 check your network interfaces and network configuration:
 
   ```shell
-  (user-hostA) $ ip a
+  (hostA) $ ip a
   1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
       inet 127.0.0.1/8 scope host lo
@@ -291,23 +323,23 @@ You can see that the container has two interfaces:
 
 ## Reaching hostB
 
-From `user-hostA`, try to ping `user-hostB` to make sure that the route it
-setup. To do so, use:
+From `hostA`, try to ping `hostB` to make sure that the route it setup. To do
+so, use:
 
   ```shell
-  (user-hostA) $ ping -c1 user-hostB
-  PING user-hostB (10.11.1.5) 56(84) bytes of data.
-  64 bytes from user-hostB.user-local-net (10.11.1.5): icmp_seq=1 ttl=64 time=0.071 ms
+  (hostA) $ ping -c1 hostB
+  PING hostB (10.11.1.5) 56(84) bytes of data.
+  64 bytes from hostB.local-net (10.11.1.5): icmp_seq=1 ttl=64 time=0.071 ms
 
-  --- user-hostB ping statistics ---
+  --- hostB ping statistics ---
   1 packets transmitted, 1 received, 0% packet loss, time 0ms
   rtt min/avg/max/mdev = 0.071/0.071/0.071/0.000 ms
   ```
 
-Note that you can also reach `user-hostB` using its ip address as follows:
+Note that you can also reach `hostB` using its ip address as follows:
 
   ```shell
-  (user-hostA) $ ping -c1 10.11.1.5
+  (hostA) $ ping -c1 10.11.1.5
   ```
 
 ## Bi-directional communication
@@ -318,27 +350,27 @@ need to flex your `tmux` muscles here.
 Launch a `tmux` session in the `prelab` directory, then split it into two panes
 (horizontally or vertically, depending on your preference).
 
-Then in one pane, login to `user-hostA`, while on the other pane, login
-`user-hostB`. We will make `user-hostA` our server while `user-hostB` will be
+Then in one pane, login to `hostA`, while on the other pane, login
+`hostB`. We will make `hostA` our server while `hostB` will be
 our client.
 
-On `user-hostA`, user:
+On `hostA`, user:
   ```shell
-  (user-hostA) $ apt install -y netcat-openbsd
-  (user-hostA) $ nc -l 1234
+  (hostA) $ apt install -y netcat-openbsd
+  (hostA) $ nc -l 1234
   ```
 This will start a `netcat` TCP server running on port 1234.
 
-One `user-hostB`, connect to that server as follows:
+One `hostB`, connect to that server as follows:
   ```shell
-  (user-hostB) $ apt install -y netcat-openbsd
-  (user-hostB) $ nc user-hostA 1234
+  (hostB) $ apt install -y netcat-openbsd
+  (hostB) $ nc hostA 1234
   ```
 
-Now, anything you type on `user-hostB` will show on the screen under
-`user-hostA`.
+Now, anything you type on `hostB` will show on the screen under
+`hostA`.
 
-To close the connection on `user-hostB`, simply hit `C-c` (recall, this means
+To close the connection on `hostB`, simply hit `C-c` (recall, this means
 `ctrl` and c). This will close on both ends.
 
 ## Talking to the outside world
@@ -348,7 +380,7 @@ going to have that option open, but it is for now). Let's see how your route to
 `1.1.1.1` looks like. To do so, on either container, do the following:
 
 ```shell
-(user-hostA) $ traceroute 1.1.1.1
+(hostA) $ traceroute 1.1.1.1
 traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
  1  10.11.1.1 (10.11.1.1)  0.048 ms  0.017 ms  0.012 ms
  2  137.112.104.3 (137.112.104.3)  0.398 ms  0.458 ms  0.467 ms
@@ -368,6 +400,8 @@ Once you are done, shut down your containers using:
   ```shell
   $ docker compose down
   ```
+
+Alternatively, you can also use `dcdn` as an alias.
 
 After a while, the containers should be down and the network will be removed.
 
