@@ -21,7 +21,7 @@ description: >-
 
 <!--
 To help you do your labs, we have a created a somewhat beefy server to host your
-virtual networks. You can reach that server at `netsec-01.csse.rose-hulman.edu`
+virtual networks. You can reach that server at `490-01.csse.rose-hulman.edu`
 via `ssh` on port 22. To login, you can use your Rose-Hulman credentials. It is
 preferable if you set up password-less access via public/private key
 authorization.
@@ -50,13 +50,13 @@ backup.
 
 First, try to login to the server and make sure that you are able to see your
 home directory. As a generic case, I will assume to be using
-`netsec-01.csse.rose-hulman.edu` as my virtual machine, but please replace it
+`490-01.csse.rose-hulman.edu` as my virtual machine, but please replace it
 with your own virtual machine FQDN in the below instructinos.
 
 To do so, use the following:
 
   ```shell
-  $ ssh csse@netsec-01.csse.rose-hulman.edu
+  $ ssh csse@490-01.csse.rose-hulman.edu
   ```
 
 If you can login successfully, check your home directory.
@@ -104,7 +104,7 @@ generate.
 Now, copy your public key to the class server using:
 
   ```shell
-  $ ssh-copy-id csse@netsec-01.csse.rose-hulman.edu
+  $ ssh-copy-id csse@490-01.csse.rose-hulman.edu
   ```
 
 {:.warning}
@@ -116,7 +116,7 @@ to copy. You can use the `-i` switch with `ssh-copy-id`.
 Now, try to login to the server again using
 
   ```shell
-  $ ssh csse@netsec-01.csse.rose-hulman.edu
+  $ ssh csse@490-01.csse.rose-hulman.edu
   ```
 
 You should not be prompted for your password again.
@@ -131,7 +131,7 @@ the following:
 
   ```txt
   Host netsec
-    HostName netsec-01.csse.rose-hulman.edu
+    HostName 490-01.csse.rose-hulman.edu
     User csse
   ```
 
