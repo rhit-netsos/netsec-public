@@ -31,7 +31,7 @@ with an emphasis on practical and development skills. Topics include denial of
 service attacks and defenses, authentication, key distribution, message
 authentication, access control, protocol security, virtual private networks, and
 security standards. The course will provide a review of basic network design,
-the end-to-end principle, and basic cryptography. Prerequisites: CSSE 220 or
+the end-to-end principle, and basic cryptography. Prerequisites: CSSE 132 or
 approval of the instructor.
 
 ## Learning objectives
@@ -57,6 +57,14 @@ While doing the labs, you will answer a series of guided questions that will
 allow you to finally define basic networking and security concepts, and then
 stitch them together to form a coherent lecture.
 
+### Paper discussion
+
+In addition to lab quizzes/reports, you will be asked to read research papers
+and comment on them with your thoughts/impressions based on your observations
+in the labs. We will do this using the [Perusall](https://www.perusall.com/)
+tool where we can collaboratively read and comment on research papers.
+
+<!--
 ### Peer teaching
 
 In addition to lab quizzes/reports, you will be asked to work with a group of
@@ -65,6 +73,7 @@ describe your findings as if you were the class instructor.
 
 These peer teaching sessions will be graded by your instructor as well as your
 peers in the classroom.
+-->
 
 ### Project
 
@@ -138,7 +147,7 @@ grade.
 | Item                   | Weight |
 | :----                  | :----- |
 | Lab assignments        | 50%    |
-| Peer Teaching          | 25%    |
+| Paper reading          | 25%    |
 | Project                | 20%    |
 | [Tentative] Final exam | 5%     |
 
