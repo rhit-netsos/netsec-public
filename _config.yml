@@ -38,6 +38,8 @@ permalink: pretty
 aux_links:
   Gradescope:
     - 'https://www.gradescope.com/courses/920689'
+  Moodle:
+    - 'https://moodle.rose-hulman.edu/course/view.php?id=112118'
   Network Security Research:
     - 'https://netsos.csse.rose-hulman.edu'
 
@@ -129,6 +131,7 @@ gh_edit_link_text: "If you notice any mistakes, please open an issue on GitHub."
 gh_edit_repository: "https://github.com/rhit-netsos/netsec-public"
 gh_edit_branch: "main"
 gh_edit_view_mode: "tree"
+moodle_link: 'https://moodle.rose-hulman.edu/course/view.php?id=112118'
 
 # Done.
 
