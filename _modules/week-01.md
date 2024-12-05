@@ -11,3 +11,4 @@ Dec 03
 Dec 05
 : **Lab Released**{: .label .label-blue }[Lab 01]({{site.baseurl}}/docs/labs/lab1)
   : [`scapy` tutorial]({{site.baseurl}}/docs/guides/scapy) [Question sheet]({{site.baseurl}}/assets/labs/lab1.pdf)
+: **Prelab 1 Due**{: .label .label-red } [Prelab 1]({{site.baseurl}}/docs/labs/prelab)

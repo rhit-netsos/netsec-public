@@ -45,3 +45,4 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos
 n*.add
 *.add.spl
+.ruby-version

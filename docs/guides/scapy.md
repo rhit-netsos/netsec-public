@@ -70,7 +70,7 @@ was able to receive. In my case, it looked something like the following:
   0004 Ether / ARP is at 02:42:0a:0a:00:0d says 10.10.0.13
   0005 Ether / ARP is at 02:42:0a:0a:00:04 says 10.10.0.4
   ```
-{:.highlight} 
+{:.highlight}
 Your output might look different depending on the state of the container at
 the time, but you should at least see the ICMP echo-request and echo-reply
 packets.
@@ -168,7 +168,7 @@ def print_pkt(pkt):
   pkt.show()
 
 if __name__ == '__main__':
-  pkt = sniff(iface='eth0', fileter='arp or icmp', prn=print_pkt)
+  pkt = sniff(iface='eth0', filter='arp or icmp', prn=print_pkt)
 ```
 
 The above script will start sniffing on `eth0` while filtering for only `arp`

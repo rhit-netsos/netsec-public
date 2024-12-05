@@ -59,6 +59,25 @@ The first time you accept an invite, you will be asked to link your account to
 your student email and name. Please be careful and choose your appropriate
 name/email combination so that I can grade appropriately.
 
+## Generating your `.env` file
+
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
+
+  ```shell
+  $ ./gen_env_file.sh
+  ```
+
+If run correctly, several files will be generated:
+
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
+
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
+
+
 <!--
 ## Patching the docker file
 
@@ -94,7 +113,8 @@ directly. The machines are:
 2. `hostB` with ip address `10.10.0.5`
 3. `attacker` with ip address `10.10.0.13`
 
-![topology]({{site.baserul}}/assets/images/lab1/topology.jpg}
+  ![topology]({{site.baseurl}}/assets/images/lab1/topology.jpg)
+
 
 ---
 
@@ -111,6 +131,10 @@ First, let's bring the experiment up using:
 
 Once the experiment is up, have at least three terminal panes open in `lab1`
 directory.
+
+{:.highlight}
+Recall that you could use the `dcupd` alias to bring up your environment. It
+serves the same purpose as `docker compose up -d`.
 
 ## Capturing packets
 
@@ -157,7 +181,7 @@ capture. We will ping `hostB` twice.
   ```
 
 Now stop `tcpdump` by selecting that pane and hitting `C-c`, `tcpdump` will
-print out however many packets it was able to capture withe the filter that we
+print out however many packets it was able to capture with the filter that we
 gave it. On my end, here's what the output was when I stopped `tcpdump`, your
 might vary depending on some timing issues.
 

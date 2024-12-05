@@ -71,116 +71,6 @@ The first time you accept an invite, you will be asked to link your account to
 your student email and name. Please be careful and choose your appropriate
 name/email combination so that I can grade appropriately.
 
-<!--
-In your labs repository, get the latest updates from the class repo as follows:
-
-First, make sure all you changes have been committed and pushed to your private
-repository. Follow the standard `git add`, `git commit -m`, and `git push`
-process.
-
-If your `git push` asks you to choose a destination, then use `origin main` as
-follows:
-  ```shell
-  $ git push origin main
-  ```
-
-Then, fetch and merge the changes from the class repository as follows:
-
-  ```shell
-  $ git fetch upstream
-  $ git pull upstream main
-  $ git push origin main
-  ```
-
-You should have a directory called `prelab` in your repository and you are good
-to go.
-
-# Patching your lab
-
-To make sure that your network are isolated, we need to set you up on different
-subnetworks and with different hostnames.
-
-## Note your subnet
-
-Each student will have a subnet allocated to them, that supports up to 32
-addresses (including broadcast and defaults). For your privacy, I will not post
-the mappings here. Instead, you will find them on the class Moodle page. Here's
-a [direct link](https://moodle.rose-hulman.edu/mod/resource/view.php?id=4207543)
-to the csv file for your convenience.
-
-Locate your username in the csv file and write down your subnet. It should look
-something like `10.10.1`. In what follows, I will assume that we are dealing
-with subnet `10.11.1`.
-
-## Patch the lab
-
-In the `prelab` directory, run the script to patch the `docker-compose.yml` file
-as follows:
-
-  ```shell
-  ./patch_docker_compose.sh user 10.11.1
-  Done.....
-  ```
-
-`user` is your username (or any unique identifier for yourself) and `10.11.1` is
-your subnet from above.
-
-### Verify patch
-
-Verify that your docker compose file now looks something like below:
-
-```docker
-version: '3'
-
-services:
-  # Add your services here, default image is netsos/rhit-netsec:latest
-  #
-  # Make sure to sync volumes using the following.
-  # volumes:
-  #   - ./volumes:/volumes
-  #
-  # Run the config script.
-  # command:
-  #   bash -c "bash /volmes/check_config.sh && tail -f /dev/null"
-  #
-  hostA:
-    image: netsos/rhit-netsec:latest
-    container_name: hostA
-    tty: true
-    cap_add:
-      - ALL
-    volumes:
-      - ./volumes:/volumes
-    networks:
-      user-local-net:
-        ipv4_address: 10.11.1.4
-    command:
-      bash -c "bash /volumes/check_config.sh && tail -f /dev/null"
-
-  hostB:
-    image: netsos/rhit-netsec:latest
-    container_name: hostB
-    tty: true
-    cap_add:
-      - ALL
-    volumes:
-      - ./volumes:/volumes
-    networks:
-      user-local-net:
-        ipv4_address: 10.11.1.5
-    command:
-      bash -c "bash /volumes/check_config.sh && tail -f /dev/null"
-
-networks:
-  user-local-net:
-    name: user-local-net
-    # enable this if need the network isolated without Internet access.
-    # internal: true
-    ipam:
-      config:
-        - subnet: 10.11.1.0/24
-```
--->
 
 # Generating your `.env` file
 
@@ -273,14 +163,14 @@ Test this out. On your host server (i.e., on the class server), add a dummy file
 to the `volumes/` directory.
 
   ```shell
-  $ echo "Hello World!" > volumes/test.txt
+  $ echo "Hello World" > volumes/test.txt
   ```
 
 Then, access any one of the containers and try to read the file:
 
   ```shell
   $ cat /volumes/test.txt
-  Hello World!
+  Hello World
   ```
 
 {:.highlight}
@@ -321,6 +211,11 @@ You can see that the container has two interfaces:
 2. `eth0`: This is the virtual NIC connected to your subnet. Notice its ip
    address, it is `10.11.1.4`.
 
+   {:.warning}
+   Your IP address might be different from mine depending on your container
+   configuration. That is totally ok. Replace all values with the corresponding
+   ones obtained from the command or from peeking into the Docker compose file.
+
 ## Reaching hostB
 
 From `hostA`, try to ping `hostB` to make sure that the route it setup. To do
@@ -342,6 +237,9 @@ Note that you can also reach `hostB` using its ip address as follows:
   (hostA) $ ping -c1 10.11.1.5
   ```
 
+Make sure to adjust the IP address to the value you see in the `ping` command
+above or the Docker compose file you have on hand.
+
 ## Bi-directional communication
 
 Next, let's make sure we can communicate both ways between A and B. You will
@@ -356,14 +254,14 @@ our client.
 
 On `hostA`, user:
   ```shell
-  (hostA) $ apt install -y netcat-openbsd
+  (hostA) $ suod apt install -y netcat-openbsd
   (hostA) $ nc -l 1234
   ```
 This will start a `netcat` TCP server running on port 1234.
 
 One `hostB`, connect to that server as follows:
   ```shell
-  (hostB) $ apt install -y netcat-openbsd
+  (hostB) $ sudo apt install -y netcat-openbsd
   (hostB) $ nc hostA 1234
   ```
 

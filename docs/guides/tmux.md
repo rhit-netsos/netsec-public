@@ -176,7 +176,7 @@ There are two main ways to create panes:
    default, the new pane will appear _on the right of_ your current pane.
 
 2. Vertically: This will split your current pane into two _vertically_. By
-   default, the new pane will appear _on the left of_ your current pane.
+   default, the new pane will appear _below_ your current pane.
 
 Go ahead and give it a try within your `my_first_session` session. Here are the
 key combinations to do:
