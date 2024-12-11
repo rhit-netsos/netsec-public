@@ -6,6 +6,7 @@ current_term: Winter 2023-24
 nav_order: 80
 parent: Labs
 lab_dir: lab4
+nav_exclude: true
 description: >-
   Lab 4 instructions
 ---

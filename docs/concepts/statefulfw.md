@@ -4,6 +4,7 @@ title: Stateful Firewalls
 last_modified_date: 2024-02-01
 current_term: Winter 2023-24
 nav_order: 70
+nav_exclude: true
 parent: Concepts
 description: >-
   Instructions for create stateful firewalls

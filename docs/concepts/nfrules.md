@@ -5,6 +5,7 @@ last_modified_date: Fri Jan 26 2024
 current_term: Winter 2023-24
 nav_order: 60
 parent: Concepts
+nav_exclude: true
 description: >-
   Instructions for create firewall rules using nftables
 ---

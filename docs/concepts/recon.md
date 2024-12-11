@@ -5,6 +5,7 @@ last_modified_date: Thu Jan 11 11:20:38 2024
 current_term: Winter 2023-24
 nav_order: 20
 parent: Concepts
+nav_exclude: true
 description: >-
   Instructions for perform network reconnaissance
 ---

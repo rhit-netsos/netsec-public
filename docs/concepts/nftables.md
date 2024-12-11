@@ -4,6 +4,7 @@ title: Introduction to Firewalls
 last_modified_date: Thu Jan 25 2024
 current_term: Winter 2023-24
 nav_order: 50
+nav_exclude: true
 parent: Concepts
 description: >-
   Instructions for create firewalls using nftables

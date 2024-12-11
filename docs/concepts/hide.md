@@ -6,6 +6,7 @@ current_term: Winter 2023-24
 nav_order: 80
 parent: Concepts
 lab_dir: hide
+nav_exclude: true
 description: >-
   Introduction to service isolation
 ---

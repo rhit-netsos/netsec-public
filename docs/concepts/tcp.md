@@ -5,6 +5,7 @@ last_modified_date: Mon 01 Jan 2024
 current_term: Winter 2023-24
 nav_order: 10
 parent: Concepts
+nav_exclude: true
 description: >-
   Instructions for setting up TCP experiment.
 ---

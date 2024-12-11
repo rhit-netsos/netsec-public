@@ -5,6 +5,7 @@ last_modified_date: Mon Dec 11 2023
 current_term: Winter 2023-24
 nav_order: 30
 parent: Labs
+nav_exclude: true
 description: >-
   Setup and instructions for lab 2.
 ---

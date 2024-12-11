@@ -25,6 +25,13 @@ further loopholes in the Address Resolution Protocol and use it to breach the
 integrity and confidentiality of packets on the network.  This will also serve
 as an introduction to IPv4 routing and the TCP handshake.
 
+{:.important}
+Please note that I have created a
+[Troubleshooting]({{site.baseurl}}/docs/guides/troubleshooting/) page to
+collect same common issues that arise during these labs. If you run into a
+problem, please consult that page first. If you cannot find your solution
+there, please let me know to investigate and add a new entry.
+
 # Logistics
 
 In addition to the tools we set up in the prelab, you will need the following:
