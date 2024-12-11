@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Prelab 2
-last_modified_date: Wed Dec  6 22:35:50 2023
-current_term: Winter 2023-24
+last_modified_date: 2024-12-10 22:50
+current_term: Winter 2024-25
 nav_order: 20
 parent: Labs
 description: >-
@@ -50,68 +50,33 @@ After completing this lab, you should be able to:
 
 # Getting the config
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://classroom.github.com/a/onITi_Z2) to accept the
+assignment and obtain your own fork of the lab repository.
+
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
+
+## Generating your `.env` file
+
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
 
   ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
+  $ ./gen_env_file.sh
   ```
 
-A folder called `prelab2` should show up in your directory, that is where you
-will do most of your lab.
+If run correctly, several files will be generated:
 
-## Patching the docker file
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-{.warning}
-Before starting here, please make sure that your experiments from lab1 are down.
-To do so, navigate back to the `lab1` directory and do `docker compose down`.
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it is
-the same on as the one announced on the Moodle page).
-
-To do so, in the `prelab2` directory, run the patch script:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  Done...
-  ```
-
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `hostA`, you should replace that with
-`user-hostA` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all ip addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-ip address `10.10.0.1` with `10.11.0.1`.
 
 # Network topology
 
@@ -203,7 +168,7 @@ You can clearly see how big the difference is.
 
 ## Directory structure
 
-Under the `prelab2/volumes` directory, you will see a `src/` directory that
+Under the `prelab02/volumes` directory, you will see a `src/` directory that
 contains the demo source code in addition to a bunch of utility helpers that
 will be useful for you later on.
 
@@ -296,9 +261,26 @@ The code is well documented, but here are the highlights:
    program when you run it. For example to capture all IPv4 and ARP packets,
    we'd do
    ```sh
-   ./printpkt.bin "ip or arp"
+   sudo ./printpkt.bin "ip or arp"
    ```
    Note that for expressions with spaces, you need to use the quotes.
+
+   {:.warning}
+   Please note that the `connect_*.sh` scripts log you in as a non root user.
+   This user has the same UID and GID as your own user on the virtual machine
+   server for the class. This way, any files generated using `make` on your
+   container will be owned by your user on the virtual machine. This will be
+   very helpful if you edit some of the source files from the container; proper
+   permissions will be preserved and you will retain access to them from
+   outside the container. This is why we require the use of `sudo` here since
+   sniffing requires higher privileges.<br><br>
+   However, if you connect to the container using `docer exec -it attacker
+   bash`, then you will be **logged in as root**. As root, you do not need to
+   use `sudo` here, but permissions on files will be mangled if you edit any of
+   the files or generate a new file.<br><br>
+   _Moral of the story_, use the `connect_*.sh` scripts to connect to the
+   containers and then use `sudo` when doing anything that requires higher
+   privileges.
 
 4. Finally, our main loop lives on line 79, it is the following:
 
@@ -349,7 +331,7 @@ Let's go ahead and try it out. First, compile the code from the `src/print`
 directory:
 
   ```sh
-  (netsec-labs-user/prelab2/volumes/src/print) $ make
+  (prelab02/volumes/src/print) $ make
   cc -MT build/printpkt.o -MMD -MP -MF build/.deps/printpkt.d -Werror -Wextra -I../nslib -ggdb   -c -o build/printpkt.o printpkt.c
   cc -MT lib/ns_arp.o -MMD -MP -MF build/.deps/ns_arp.d -Werror -Wextra -I../nslib -ggdb   -c -o lib/ns_arp.o ../nslib/ns_arp.c
   cc -MT lib/util.o -MMD -MP -MF build/.deps/util.d -Werror -Wextra -I../nslib -ggdb   -c -o lib/util.o ../nslib/util.c
@@ -359,15 +341,14 @@ directory:
   cc -Llib build/printarp.o lib/libnslib.a -o printarp.bin -lpcap -lnslib
   ```
 
-Then, bring up the experiment from the `prelab2` directory:
+Then, bring up the experiment from the `prelab02` directory:
   ```sh
-  (netsec-labs-user/prelab2/) $ docker compose up -d
+  (prelab02/) $ dcupd
   ```
 
 Then, login to the `attacker` container, and start the program.
   ```sh
-  (attacker) $ cd /volumes/src/print/
-  (attacker) $ ./printpkt.bin
+  (attacker) $ sudo ./printpkt.bin
   ```
   <div class="code-example" markdown="1">
   ```txt
@@ -631,7 +612,7 @@ Compile the code using `make` in the `print` directory, and then run it on the
 `attacker` machine.
 
 ```sh
-(attacker) $ ./printarp.bin
+(attacker) $ sudo ./printarp.bin
 [LOG:printarp.c:main:46] Starting printarp.bin on interface eth0
 [LOG:printarp.c:main:84] (18:30:52.651590) Got a packet of len 98
 [LOG:printarp.c:main:84] (18:30:53.663912) Got a packet of len 98
