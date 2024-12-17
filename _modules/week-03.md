@@ -5,6 +5,8 @@ title: "Week 03: Wrapping up Layer 2"
 Dec 17
 : **Prelab 2 Due**{: .label .label-red }[Prelab 02]({{site.baseurl}}/docs/labs/prelab2)
 : **Lab 2 Released**{: .label .label-blue }[Lab 02]({{site.baseurl}}/docs/labs/lab2)
+  : [Question sheet]({{site.baseurl}}/assets/labs/lab2.pdf)
+
 
 Dec 19
 : Continue Lab 02
