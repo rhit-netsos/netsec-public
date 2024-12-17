@@ -1,11 +1,10 @@
 ---
 layout: page
 title: Lab 2
-last_modified_date: Mon Dec 11 2023
-current_term: Winter 2023-24
+last_modified_date: 2024-12-17 12:31
+current_term: Winter 2024-25
 nav_order: 30
 parent: Labs
-nav_exclude: true
 description: >-
   Setup and instructions for lab 2.
 ---
@@ -49,97 +48,40 @@ After completing this lab, you should be able to:
 - Conduct a MITM attack on two hosts to act as a router.
 - Explore IP routing and TCP set up.
 
+
 # Getting the config
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4750346)
+to accept the assignment and obtain your own fork of the lab repository.
+
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
+
+## Generating your `.env` file
+
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
 
   ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
+  $ ./gen_env_file.sh
   ```
 
-A folder called `lab2` should show up in your directory, that is where you
-will do most of your lab.
+If run correctly, several files will be generated:
 
-## Patching the docker file
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-{.warning}
-Before starting here, please make sure that your experiments from prelab2 are
-down.  To do so, navigate back to the `prelab2` directory and do `docker compose
-down`.
-
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it is
-the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
-
-To do so, in the `lab2` directory, run the patch script:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  Done...
-  ```
-
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see three new files in your directory:
-`connct_hostA.sh`, `connect_hostB.sh`, and `connect_attacker.sh`. You can use
-these scripts to directly connect to the desired host, without having to type
-the whole `docker container exec -it` command. Finally, I have also adjust the
-container's hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `hostA`, you can use:
-
-  ```sh
-	$ ./connect_hostA.sh
-  ┌──(root㉿hostA)-[/]
-  └─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are enable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `hostA`, you should replace that with
-`user-hostA` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all IP addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-IP address `10.10.0.1` with `10.11.0.1`.
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
 # Network topology
 
 We will start off with a similar topology to that of lab1. We will have three
-containers (recall to replace `10.10.0` with your subnet):
+containers:
 
 1. `hostA` with IPv4 address of `10.10.0.4`
 2. `hostB` with IPv4 address of `10.10.0.5`
@@ -167,9 +109,9 @@ After the attack, it should become:
 
 # 1. Implementing ping
 
-We will start off with implement `ping` again, just to learn how to send packet
-using `libpcap`. In your `lab2` directory, navigate to `volumes/src/ping` and
-look at the source code in there.
+We will start off with implementing `ping` again, just to learn how to send
+packet using `libpcap`. In your `lab2` directory, navigate to
+`volumes/src/ping` and look at the source code in there.
 
 The code is structured in the following manner:
 
@@ -217,7 +159,7 @@ Grab two terminals, one connected to `hostA` and another connected to
 
   ```sh
   (netsec-01) $ ./connect_hostA.sh
-  ┌──(root㉿hostA)-[/]
+  ┌──(netsec㉿hostA)-[/volumes]
   └─# ping -c1 attacker
   PING attacker (10.10.0.10) 56(84) bytes of data.
 
@@ -253,8 +195,8 @@ If you implement this correctly, you should see something like (skip the
 
   ```sh
   (netsec-01) $ ./connect_attacker.sh
-  ┌──(root㉿attacker)-[/volumes/src/ping]
-  └─# ./ping.bin $(cat /sys/class/net/eth0/address)
+  ┌──(netsec㉿attacker)-[/volumes/src/ping]
+  └─# sudo ./ping.bin $(cat /sys/class/net/eth0/address)
   [LOG:ping.c:main:75] ./ping.bin (27): Found device: eth0
   [LOG:ping.c:main:103] Running ping.bin with filter icmp and (not ip src 10.10.0.10) and (not ether src 02:42:0a:0a:00:0a)
   [LOG:parse_icmp.c:parse_icmp:44] Received ICMP Echo Request from 10.10.0.4
@@ -264,7 +206,7 @@ while from `hostA`:
 
   ```sh
   (netsec-01) $ ./conect_hostA.sh
-  ┌──(root㉿hostA)-[/]
+  ┌──(netsec㉿hostA)-[/]
   └─# ping -c1 attacker
   PING attacker (10.10.0.10) 56(84) bytes of data.
 
@@ -412,14 +354,14 @@ iphdr->/*field name*/ = chksum((uint16_t*)iphdr, sizeof *iphdr);
 Once that is done, recompile and test again, you should see something like the
 following:
   ```sh
-  ┌──(root㉿attacker)-[/volumes/src/ping]
-  └─# ./ping.bin $(cat /sys/class/net/eth0/address)
+  ┌──(netsec㉿attacker)-[/volumes/src/ping]
+  └─# sudo ./ping.bin $(cat /sys/class/net/eth0/address)
   [LOG:ping.c:main:75] ./ping.bin (37): Found device: eth0
   [LOG:ping.c:main:103] Running ping.bin with filter icmp and (not ip src 10.10.0.10) and (not ether src 02:42:0a:0a:00:0a)
   ```
 and from hostA
   ```sh
-  ┌──(root㉿hostA)-[/]
+  ┌──(netsec㉿hostA)-[/]
   └─# ping -c2 attacker
   PING attacker (10.10.0.10) 56(84) bytes of data.
   64 bytes from attacker.local-net (10.10.0.10): icmp_seq=1 ttl=64 time=6.30 ms
@@ -454,7 +396,7 @@ Starting from an empty ARP table, let's first ping `hostA` from `hostB`, while
 at the same time capturing traffic on `hostA`, as follows:
 
   ```sh
-  (hostA) $ tcpdump -i eth0 arp or icmp -w /volumes/phaseone.pcap
+  (hostA) $ sudo tcpdump -i eth0 arp or icmp -w /volumes/phaseone.pcap
   ```
 and then from another terminal on `hostA`,
   ```sh
@@ -526,7 +468,7 @@ then examine the content of the ARP cache using `arp -an`. You will see that
 host did not reply to its requests.
 
 ```sh
-┌──(root㉿hostA)-[/]
+┌──(netsec㉿hostA)-[/]
 └─# arp -an
 ? (10.10.0.12) at <incomplete> on eth0
 ```
@@ -565,11 +507,11 @@ from `ip a`), we will read through the command line. So to run our executable
 where the victim is 10.10.0.5 and the target is 10.10.0.4, we do:
 
   ```shell
-  $ ./arp_poison.bin $(cat /sys/class/net/eth0/address) 10.10.0.5 10.10.0.4
+  $ sudo ./arp_poison.bin $(cat /sys/class/net/eth0/address) 10.10.0.5 10.10.0.4
   ```
 
-Remember to replace your subnet accordingly. Feel free to put this in a script
-to avoid typing too much, something like `run_poison.sh`:
+Feel free to put this in a script to avoid typing too much, something like
+`run_poison.sh`:
 
   ```sh
   #!/bin/bash
@@ -581,7 +523,7 @@ to avoid typing too much, something like `run_poison.sh`:
   TARGET_IP="10.10.0.4"
 
   # Run the attack
-  ./arp_poison.bin $(cat /sys/class/net/eth0/address) $VICTIM_IP $TARGET_IP
+  sudo ./arp_poison.bin $(cat /sys/class/net/eth0/address) $VICTIM_IP $TARGET_IP
   ```
 
 Then, mark it as executable using `chmod +x ./run_poison.sh` and run it using
