@@ -1,6 +1,16 @@
 ---
-title: "Week 04: Layers 3 and 4"
+title: "Week 04: Dive into Transport Layer"
 ---
+
+Jan 07
+: Continue Lab 2.
+  : [Lab2]({{site.baseurl}}/docs/labs/lab2) [Question sheet]({{site.baseurl}}/assets/labs/lab2.pdf)
+: Signup to Perusall (link in top right corner)
+
+Jan 09
+: TCP Deep Dive.
+: **First reading due on Sunday evening**{: .label .label-red}
+
 
 <!--
 Dec 18
