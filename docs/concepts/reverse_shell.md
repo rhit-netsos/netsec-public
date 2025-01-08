@@ -5,7 +5,7 @@ last_modified_date: Thu Jan 11 11:20:38 2024
 current_term: Winter 2023-24
 nav_order: 10
 parent: Concepts
-nav_exclude: true
+nav_exclude: false
 description: >-
   Instructions for creating a reverse shell in Linux.
 ---
