@@ -8,7 +8,7 @@ Jan 07
 : Signup to Perusall (link in top right corner)
 
 Jan 09
-: **Mini Lab 01 Release**{: .label .label-blue} [Reverse Shell]({{site.baseurl}}/docs/concepts/revshell)
+: **Mini Lab 01 Release**{: .label .label-blue} [Reverse Shell]({{site.baseurl}}/docs/concepts/reverse_shell)
   : [Question sheet]({{site.baseurl}}/assets/concepts/revshell.pdf)
 : **First reading due on Sunday evening**{: .label .label-red}
 
