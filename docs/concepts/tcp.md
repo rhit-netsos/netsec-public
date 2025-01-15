@@ -81,7 +81,7 @@ the client.
 
 On the server end, start a packet capture for TCP traffic:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_1.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_1.pcap
 ```
 and in the other terminal, start a `netcat` server using:
 ```sh
@@ -130,7 +130,7 @@ try to connect to the server from the client.
 
 Run a packet capture for TCP traffic on the server end:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_2.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_2.pcap
 ```
 
 On the client, attempt to connect to the server using:
@@ -165,7 +165,7 @@ to talk to the non-existing server `10.10.0.80`.
 
 On the client, start a packet capture for TCP packets using:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_3.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_3.pcap
 ```
 
 Before we can actually try this experiment, we need to do a little trick to see
@@ -178,13 +178,13 @@ convince it that that particular server exists, even if it does not.
 Fortunately, we won't write an exploit for that, we can do it from the client
 using:
 ```sh
-arp -s 10.10.0.80 02:32:0a:0a:00:06
+sudo arp -s 10.10.0.80 02:32:0a:0a:00:06
 ```
 
 Then from the other terminal window, try to reach a server that is not on the
 network, let's try for `10.10.0.80`.
 ```sh
-netcat 10.10.0.80 1234
+nc 10.10.0.80 1234
 ```
 
 The `netcat` client would hang for a bit (give it a minute or two), then it
@@ -224,7 +224,7 @@ connection normally before stopping the packet capture.
 
 On the server, start a `tcpdump` packet capture using:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_4.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_4.pcap
 ```
 Then start a `netcat` server using:
 ```sh
@@ -233,8 +233,9 @@ nc -n -v -l 1234
 
 At the client end, connect to the server using:
 ```sh
-netcat server 1234
+nc server 1234
 ```
+
 Do not send any data over the connection, simply kill it using `C-c` on the
 client. This will cause by the server and the client to stop the `netcat`
 program and drop back into the shell. Once that happens, stop the packet
@@ -267,7 +268,7 @@ exchanging data between the client and the server now.
 
 On the server, start a `tcpdump` packet capture using:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_5.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_5.pcap
 ```
 Then start a `netcat` server using:
 ```sh
@@ -276,7 +277,7 @@ nc -n -v -l 1234
 
 On the client's side, start a connection to the server using:
 ```sh
-netcat server 1234
+nc server 1234
 ```
 
 Now, anything you type on the client's side will show up at the server's side
@@ -307,7 +308,7 @@ and download the packet capture file to open it with `Wireshark`.
 ## Question sheet
 
 Please note that the number of packets you will see might vary, so it's okay if
-it does always appear the same. We are only interested here in the packets
+it doesn't always appear the same. We are only interested here in the packets
 between the end of the three-way-handshake and the start of the connection
 termination step. For me those were packet 4 through 15, but the end number
 might be different for you.
@@ -364,11 +365,11 @@ Observe the packet capture and answer the following questions:
 # Experiment 6: Observing `telnet`
 
 Finally, we will explore a different application that runs over TCP, namely the
-`telnet` service. The `telnet` is kind of the predecessor for `ssh` where a
-remote client can login to a server and access a shell to issue commands. For
-good reason, `telnet` should generally not be used as it does everything in
-plain text, including authentication, so we normally just use it for debugging
-and testing.
+`telnet` service. `telnet` is kind of the predecessor for `ssh` where a remote
+client can login to a server and access a shell to issue commands. For good
+reason, `telnet` should generally not be used as it does everything in plain
+text, including authentication, so we normally just use it for debugging and
+testing.
 
 The server has already been configured to host a `telnet` service; you can
 login to it with the username `root` and the password `netsec`. Our goal here
@@ -378,7 +379,7 @@ happen.
 On the server end, start a packet capture session, just like the previous
 experiments:
 ```sh
-tcpdump -i eth0 tcp -w /volumes/experiment_5.pcap
+sudo tcpdump -i eth0 tcp -w /volumes/experiment_6.pcap
 ```
 
 On the client side, start a telnet session as follows:
@@ -388,7 +389,10 @@ telnet server
 
 You will be prompted for the username and password, once you enter those, you
 will be dropped into a root shell session that you can use to issue commands.
-For simplicity, let's just print the current working directory using `pwd`.
+You can use `root` as the username and `netsec` as the password.
+
+For simplicity, from the created shell, let's just print the current working
+directory using `pwd`.
 
 When you issue a command, it will be executed on the server, but the output
 will show up on the client's side. To avoid bloating the packet capture, let's
@@ -401,7 +405,7 @@ packet capture file.
 ## Question sheet
 
 Let's examine the packet capture and see how `telnet` operates. First, there
-will a configuration or negotiation phase; we will not bother ourselves with
+will be a configuration or negotiation phase; we will not bother ourselves with
 it, we will simply skip over it. Our first point of interest is when the user
 enters the username they wish to use for the session.
 
@@ -450,4 +454,15 @@ commands, **without interruption**, from your malicious machine on the target
 server?
 
 Think about this for a while, that would be the topic of our next lab.
+
+## Question Sheet
+
+Please summarize what you have learned about the TCP protocol. Make sure to
+mention who connections are established, how they are terminated, and how is
+data arranged.
+
+When it comes to the `Telnet` protocol, list out any potential
+vulnerabilities you might think of if you were able to sit in the middle
+between the server and the client.
+
 

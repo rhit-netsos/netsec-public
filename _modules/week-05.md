@@ -2,19 +2,13 @@
 title: "Week 05: Transport Control Protocol"
 ---
 
-<!--
-Jan 08
-: [Introduction to TCP]({{site.baseurl}}/docs/concepts/tcp)
+Jan 14
+: Continue Lab 2.
+  : [Lab2]({{site.baseurl}}/docs/labs/lab2) [Question sheet]({{site.baseurl}}/assets/labs/lab2.pdf)
+
+Jan16
+: **Mini Lab 02 Released**{: .label .label-blue} [TCP Minilab]({{site.baseurl}}/docs/concepts/tcp)
   : [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
+: **Submit Lab 02**{: .label .label-red}
+  : Please commit and push your code when done.
 
-Jan 09
-: Class canceled.
-
-Jan 11
-: [TCP Session Hijacking and Reverse Shells]({{site.baseurl}}/docs/concepts/reverse_shell)
-  : [Question sheet]({{site.baseurl}}/assets/concepts/revshell.pdf)
-
-Jan 12
-: [Network Recon]({{site.baseurl}}/docs/concepts/recon)
-  : Submit code via gradescope
--->
