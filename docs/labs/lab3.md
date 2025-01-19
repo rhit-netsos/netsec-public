@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Lab 3
-last_modified_date: Mon Jan 15 2024
-current_term: Winter 2023-24
+last_modified_date: Sun Jan 19 11:28:55 EST 2025
+current_term: Winter 2024-25
 nav_order: 40
 parent: Labs
-nav_exclude: true
+nav_exclude: false
 description: >-
   Setup and instructions for lab 3.
 ---
@@ -25,7 +25,7 @@ concept labs to hijack an active `telnet` TCP connection between a client and a
 server. Before starting this lab, make sure you have a solid grasp on the TCP
 concept lab and the reverse shell concept lab.
 
-# Logistics
+# Tools
 
 In addition to the tools we set up in the prelab, you will need the following:
 
@@ -47,88 +47,35 @@ After completing this lab, you should be able to:
   server.
 - Create a reverse shell to be able to exfiltrate data from the remote server.
 
-# Getting the config
+# Logistics
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+<!-- TODO: Add link to Github classroom assignment here... -->
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4762232)
+to accept the assignment and obtain your own fork of the lab repository.
 
-  ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
-  ```
+{: .important }
+The first time you accept an invite, you will be asked to link your account to
+your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
 
-A folder called `hijack` should show up in your directory, that is where you
-will do most of your lab.
+## Generating your `.env` file
 
-## Patching the docker file
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the lab repository directory as follows:
 
-{.warning}
-Before starting here, please make sure that your experiments from previous labs
-are down.
+```shell
+$ ./gen_env_file.sh
+```
 
-{.warning}
-The subnets for this lab have changed, so do not worry if you see different
-subnets show up for your containers.
+If run correctly, several files will be generated:
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it is
-the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-To do so, in the `hijack` directory, run the patch script:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  Done...
-  ```
-
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see three new files in your directory:
-`connct_hostA.sh`, `connect_hostB.sh`, and `connect_attacker.sh`. You can use
-these scripts to directly connect to the desired host, without having to type
-the whole `docker container exec -it` command. Finally, I have also adjust the
-container's hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `hostA`, you can use:
-
-  ```sh
-	$ ./connect_hostA.sh
-  ┌──(root㉿hostA)-[/]
-  └─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are enable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
 # Network topology
 
@@ -147,29 +94,17 @@ session hijacking attack to run arbitrary commands on the server.
 Under the `volumes` directory, you will find the `src/route` directory. This is
 where all of your code should live. I have already provided you with code that
 does routing on the attacker, so you don't have to worry about that. All of
-your packet injection code can be found in the file `hijack_conn.c`.
+your packet injection starter code can be found in the file `hijack_conn.c`.
 
-There is only one thing you need to edit in `route.c` and that is the IP and
-MAC addresses for your client and server containers. You will find those at the
-top of file as such:
-
-```c
-#define SERVER_IP "10.10.1.15"
-#define SERVER_MAC "02:42:0a:0a:01:0f"
-
-#define CLIENT_IP "10.10.0.4"
-#define CLIENT_MAC "02:42:0a:0a:00:04"
-```
-
-Please adjust those values to match your own configuration, and then compile
-the code using `make` in the `route` directory. A `route.bin` executable will
-show up.
+Examine `route.c` and `hijack_conn.c` to understand what they are trying to do.
+Once you are ready, compile the code in the `route` directory using `make`; the
+binary `route.bin` should be generated.
 
 ## Testing basic routing
 
 To make sure everything starts off correctly, bring up your environment using:
 ```sh
-docker compose up -d
+dcupd
 ```
 and then grab a terminal at the client and **two** on the attacker.
 
@@ -177,24 +112,27 @@ The routing code will have to run in two separate processes since we would like
 to handle bi-directional communication. Therefore, in one attacker terminal
 window run:
 ```sh
-cd /volumes/src/route/
-./route.bin -i eth0 -o eth1
+cd /src/route/
+sudo ./route.bin -i eth0 -o eth1
 ```
 and on another attacker terminal, run
 ```sh
-cd /volumes/src/route/
-./route.bin -i eth1 -o eth0
+cd /src/route/
+sudo ./route.bin -i eth1 -o eth0
 ```
 
 This will instruct the `route.bin` program to listen on both interfaces to make
 sure you can forward traffic correctly.
 
+{:highlight}
+Feel free to put those two commands in a script to ease up the launching of
+the attack. I preferred to keep them on separate terminals to be able to debug
+and see what's going on for each interface on the attacker router.
+
 From the client terminal, try to reach the server first using `ping`:
 ```sh
 ping -c 10.10.1.15
 ```
-{:.highlight}
-Remember to replace `10.10.1.15` with your server's IP address.
 
 If the `ping` is successful, you should be good to go. Otherwise, please
 contact me as soon as possible to debug. After that, create a `netcat` service
@@ -246,6 +184,7 @@ if(iphdr->protocol == IPPROTO_TCP) {
   }
 }
 ```
+
 This piece of code checks if a TCP packet has been detected, and then computes
 its checksum value. However, if the packet contains both `PUSH` and `ACK`
 flags, we will check for the specific trigger using `is_triggered` and then

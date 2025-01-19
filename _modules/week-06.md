@@ -2,6 +2,16 @@
 title: "Week 06: TCP wrapup and Network Recon"
 ---
 
+Jan 21
+: **Wrap up mini lab 02**{: .label .label-red}
+  : [Instructions]({{site.baseurl}}/docs/concepts/tcp) [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
+: **Lab 03 Released**{: .label .label-blue}
+  : [Instructions]({{site.baseurl}}/docs/labs/lab3)
+
+Jan 23
+: Continue lab 03
+  : [Instructions]({{site.baseurl}}/docs/labs/lab3)
+
 <!--
 Jan 15
 : **Lab 3 Released**{:.label .label-blue}
