@@ -7,6 +7,8 @@ Jan 21
   : [Instructions]({{site.baseurl}}/docs/concepts/tcp) [Question sheet]({{site.baseurl}}/assets/concepts/tcplab.pdf)
 : **Lab 03 Released**{: .label .label-blue}
   : [Instructions]({{site.baseurl}}/docs/labs/lab3)
+: **Paper 2 Released**{: .label .label-blue}
+  : [Perusall link](https://app.perusall.com/courses/csse490-network-security-winter2425/_/dashboard/assignments/DTxaY7vGeNoK42vTb)
 
 Jan 23
 : Continue lab 03
