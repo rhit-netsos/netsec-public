@@ -131,7 +131,7 @@ and see what's going on for each interface on the attacker router.
 
 From the client terminal, try to reach the server first using `ping`:
 ```sh
-ping -c 10.10.1.15
+ping -c 1 10.10.1.5
 ```
 
 If the `ping` is successful, you should be good to go. Otherwise, please
