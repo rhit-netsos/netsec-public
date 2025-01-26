@@ -2,6 +2,13 @@
 title: "Week 07: Firewalls"
 ---
 
+Jan 28
+: **Mini Lab 03 Released**{: .label .label-blue}
+  : [Network Recon]({{site.baseurl}}/docs/concepts/recon)
+
+Jan 30
+: Docker tutorial
+
 <!--
 Jan 22
 : Finish up [Lab 3]({{site.baseurl}}/docs/labs/lab3)

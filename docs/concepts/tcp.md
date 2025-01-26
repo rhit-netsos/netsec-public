@@ -35,7 +35,6 @@ At the end of this session, you should be able to:
 
 # Logistics
 
-<!-- TODO: Add link to Github classroom assignment here... -->
 For this lab, we will be using GitHub classroom to get the starter code. Please
 follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4759706)
 to accept the assignment and obtain your own fork of the lab repository.
