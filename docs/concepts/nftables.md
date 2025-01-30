@@ -68,8 +68,8 @@ follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4768799)
 to accept the assignment and obtain your own fork of the lab repository.
 
 {: .important }
-The first time you accept an invite, you will be asked to link your account to
-your student email and name. Please be careful and choose your appropriate
+The first time you accept an invitation, you will be asked to link your account
+to your student email and name. Please be careful and choose your appropriate
 name/email combination so that I can grade appropriately.
 
 ## Generating your `.env` file
@@ -138,8 +138,8 @@ After running your `nmap` scan, answer the following questions:
    that service is running and reachable.
 
    _Hint_: Your containers can reach the Internet, so if you need some tools,
-   feel free to install those using `apt update && apt instal -y <tool package
-   name>`.
+   feel free to install those using `sudo apt update && suod apt instal -y
+   <tool package name>`.
 
 # Step 2: Adding firewall rules
 
@@ -157,12 +157,25 @@ performance.
 All of your firewall rules must happen on the `firewall` container. Do not add
 or change any rules on the `client` or `server` containers.
 
+{:.warning}
+Please note that all the command below need escalated privileges, and thus use
+the `sudo` command. However, please note that you can either login as root
+(using `docker exec -it <container> /bin/bash`) or after using the
+`./connect_*` script, use `sudo -s` to switch to the root account.
+
+{:.warning}
+Please note that if you are logged in as `root` and you edit or create any
+files, then you might lose access to it outside of the container. To prevent
+that from happening, edit your files from the virtual machine (not the
+container). But if you happen to forget, you can always change the owner of
+that file back to `netsec` using `chmod netsec file_path`.
+
 ## View current rules
 
 On the `firewall` container, let's examine the current rules there. You can do
 so using:
 ```sh
-nft list ruleset
+sudo nft list ruleset
 ```
 
 On my setup, that showed something like the following:
@@ -220,17 +233,18 @@ In this lab, we will only concern ourselves with the `ip` family.
 Let's first create a table for this lab, we'll call it `netsec_tbl`. To do so,
 you can use:
 ```sh
-nft add table ip netsec_tbl
+sudo nft add table ip netsec_tbl
 ```
-You can see here that first argument after `nft add table` is the family to
+You can see here that first argument after `sudo nft add table` is the family to
 which the table will belong (which is `ip` in our case), followed by the name
 you'd like to give to that table.
 
-Now, run `nft list ruleset` to see that your table has been successfully
+Now, run `sudo nft list ruleset` to see that your table has been successfully
 created. It will show up as empty for now. To only see our table, you can also
-use `nft list table netsec_tbl`.
+use `sudo nft list table netsec_tbl`.
 
-Here are some other useful commands when it comes to tables:
+Here are some other useful commands when it comes to tables (recall to always
+use `sudo` if you are not logged in as root):
 
 - To delete a table: `nft delete table ip netsec_tbl`.
 - To remove all the rules in a table: `nft flush table ip netsec_tbl`.
@@ -332,11 +346,11 @@ reach each other.
 To add this chain, use:
 
 ```sh
-nft 'add chain ip netsec_tbl netsec_in { type filter hook input priority 0 ;
+sudo nft 'add chain ip netsec_tbl netsec_in { type filter hook input priority 0 ;
 policy drop ; comment "my first chain" ; }'
 ```
 
-To make sure your chain shows up in the table, you can use `nft list table
+To make sure your chain shows up in the table, you can use `sudo nft list table
 netsec_tbl`. Mine looks like the following:
 
 ```txt
@@ -368,16 +382,16 @@ it and replace it with a chain that produces more of what we want.
 To do so, first you'll need to flush the chain to remove any rules in it using:
 
 ```sh
-nft flush chain netsec_tbl netsec_in
+sudo nft flush chain netsec_tbl netsec_in
 ```
 
 Then you can delete the chain using:
 
 ```sh
-nft delete chain ip netsec_tbl netsec_in
+sudo nft delete chain ip netsec_tbl netsec_in
 ```
 
-Verify that your chain has been deleted using `nft list table netsec_tbl`.
+Verify that your chain has been deleted using `sudo nft list table netsec_tbl`.
 
 ### Adjust the chain
 

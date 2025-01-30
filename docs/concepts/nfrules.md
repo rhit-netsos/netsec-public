@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Introduction to Firewall Rules
-last_modified_date: Fri Jan 26 2024
-current_term: Winter 2023-24
+last_modified_date: Thu Jan 30 02:56:04 EST 2025
+current_term: Winter 2024-25
 nav_order: 60
 parent: Concepts
-nav_exclude: true
+nav_exclude: false
 description: >-
   Instructions for create firewall rules using nftables
 ---
@@ -51,7 +51,7 @@ correctly, check the content of the table using (note that I reduced the indent
 size for clarity):
 
 ```sh
-$ ./netsec_tbl.nft
+$ sudo ./netsec_tbl.nft
 table ip netsec_tbl {
   chain netsec_in {
       comment "our first netsec chain"
@@ -107,11 +107,11 @@ environment.
 
 After creating the rules script, execute it using:
 ```sh
-./netsec_rules.nft
+sudo ./netsec_rules.nft
 ```
 Verify that it run correctly using:
 ```sh
-nft list table netsec_tbl
+sudo nft list table netsec_tbl
 ```
 My output looks something the following:
 ```sh
@@ -150,7 +150,7 @@ to its default policy specified when the chain was created. To do so, you can
 use:
 
 ```sh
-nft flush chain netsec_tbl netsec_in
+sudo nft flush chain netsec_tbl netsec_in
 ```
 
 Recall that you can also delete that chain using `nft delete chain netsec_tbl
@@ -163,7 +163,7 @@ rule's number from the table. You can do so by adding the `-a` flag to the
 `nft` command as follows:
 
 ```sh
-nft -a list table netsec_tbl
+sudo nft -a list table netsec_tbl
 ```
 
 On my container, here's my output:
@@ -184,7 +184,7 @@ that specific rule that you wish to manipulate.
 
 To delete that rule, you can use:
 ```sh
-nft delete rule netsec_tbl netsec_in handle 7
+sudo nft delete rule netsec_tbl netsec_in handle 7
 ```
 That rule will disappear from your table after that.
 
@@ -205,7 +205,7 @@ Let's add our first rule as follows (feel free to put this in a script if you'd
 like):
 
 ```sh
-nft add rule netsec_tbl netsec_in ip saddr 10.10.0.4 icmp type echo-request counter drop
+sudo nft add rule netsec_tbl netsec_in ip saddr 10.10.0.4 icmp type echo-request counter drop
 ```
 
 Note that in this case our rule perform two actions: _counter_ and _drop_,
@@ -224,7 +224,7 @@ and record the rule's handle.
 To replace that rule, you can then use:
 
 ```sh
-nft replace rule netsec_tbl netsec_in handle <handle_num> ip saddr 10.10.0.4 icmp type echo-request counter reject
+sudo nft replace rule netsec_tbl netsec_in handle <handle_num> ip saddr 10.10.0.4 icmp type echo-request counter reject
 ```
 where `<handle_num>` is the handle number of your rule.
 
