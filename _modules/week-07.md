@@ -8,6 +8,11 @@ Jan 28
 
 Jan 30
 : Docker tutorial
+: **New mini labs**{:.label .label-blue}
+: [Introduction to firewalls]({{site.baseurl}}/docs/concepts/nftables)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/nftables.pdf)
+: [Introduction to firewalls rules]({{site.baseurl}}/docs/concepts/nfrules)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/nfrules.pdf)
 
 <!--
 Jan 22
