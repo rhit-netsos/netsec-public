@@ -1,10 +1,10 @@
 ---
 layout: page
 title: Stateful Firewalls
-last_modified_date: 2024-02-01
-current_term: Winter 2023-24
+last_modified_date: Thu Feb  6 12:40:41 EST 2025
+current_term: Winter 2024-25
 nav_order: 70
-nav_exclude: true
+nav_exclude: false
 parent: Concepts
 description: >-
   Instructions for create stateful firewalls
@@ -44,92 +44,49 @@ At the end of this concept lab, you should be able to:
 
 # Logistics
 
-## Getting the configuration
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4780223)
+to accept the assignment and obtain your own fork of the lab repository.
 
-To start with this concept lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+{: .important }
+The first time you accept an invitation, you will be asked to link your account
+to your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
 
-  ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
-  ```
+## Generating your `.env` file
 
-A folder called `statefulfw` should show up in your directory, that is where you
-will do most of your lab.
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the prelab repository directory as follows:
 
-## Patching the docker file
+```shell
+$ ./gen_env_file.sh
+```
 
-{:.warning}
-Before starting here, please make sure that your experiments from all other
-labs are down.  To do so, navigate back to the latest lab directory and do
-`docker compose down`.
+If run correctly, several files will be generated:
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it
-is the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-To do so, in the `statefulfw` directory, run the patch script:
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  Done...
-  ```
+## Network Topology
 
-If you had already patched your script, you will see something like this:
+You can find the network topology for this lab below:
 
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see two new files in your directory:
-`connct_client.sh` and `connect_server.sh`. You can use these scripts to
-directly connect to the desired host, without having to type the whole `docker
-container exec -it` command. Finally, I have also adjust the container's
-hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `client`, you can use:
-
-  ```sh
-	$ ./connect_client.sh
-  ┌──(root㉿client)-[/]
-  └─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are unable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `client`, you should replace that with
-`user-client` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all IP addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-IP address `10.10.0.1` with `10.11.0.1`.
+```txt
++-------------------+          +-------------------+           +-------------------+
+|    client2        |__________|    firewall       |___________|    server         |
+|  IP: 10.10.0.5    |   |      |  IP: 10.10.0.10   |     |     |  IP: 10.10.1.4    |
++-------------------+   |      |  IP: 10.10.1.10   |     |     +-------------------+
+                        |      +-------------------+     |
+                        |                                |
++-------------------+   |                                |     +-------------------+
+|    client1        |___|                                |_____|    workstation    |
+|  IP: 10.10.0.4    |                                          |  IP: 10.10.1.5    |
++-------------------+                                          +-------------------+
+```
 
 ---
 
