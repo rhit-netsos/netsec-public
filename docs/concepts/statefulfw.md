@@ -88,6 +88,17 @@ You can find the network topology for this lab below:
 +-------------------+                                          +-------------------+
 ```
 
+## Missing hostname mappings
+
+If your `docker-compose.yml` file is missing the `extra_hosts` property, then
+please replace it with the following
+[file]({{site.baseurl}}/assets/docker/docker-compose.yml). Here's an easy way
+to do it:
+
+```shell
+wget https://netsos.csse.rose-hulman.edu/courses/netsec/assets/docker/docker-compose.yml .
+```
+
 ---
 
 # A stateful firewall

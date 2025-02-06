@@ -1,0 +1,162 @@
+# set the name for the project
+name: statefulfw
+
+services:
+  client1:
+    image: netsos/rhit-netsec:fw
+    container_name: client1
+    hostname: client1
+    tty: true
+    working_dir: /volumes/
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes:/volumes
+    networks:
+      subnet1:
+        ipv4_address: 10.10.0.4
+    extra_hosts:
+      server: "10.10.1.4"
+      workstation: "10.10.1.5"
+    command: >
+      bash -c "
+      userdel netsec &&
+      groupadd -g ${GID} netsec_group &&
+      useradd -m -u ${UID} -g netsec_group -s /bin/bash netsec &&
+      echo 'netsec ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers &&
+      bash /volumes/check_config.sh &&
+      cp /volumes/vimrc /home/netsec/.vimrc &&
+      bash /volumes/fix_depends.sh &&
+      ip route add 10.10.1.0/24 dev eth0 via 10.10.0.10 &&
+      tail -f /dev/null
+      "
+
+  client2:
+    image: netsos/rhit-netsec:fw
+    container_name: client2
+    hostname: client2
+    tty: true
+    working_dir: /volumes/
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes:/volumes
+    networks:
+      subnet1:
+        ipv4_address: 10.10.0.5
+    extra_hosts:
+      server: "10.10.1.4"
+      workstation: "10.10.1.5"
+    command: >
+      bash -c "
+      userdel netsec &&
+      groupadd -g ${GID} netsec_group &&
+      useradd -m -u ${UID} -g netsec_group -s /bin/bash netsec &&
+      echo 'netsec ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers &&
+      bash /volumes/check_config.sh &&
+      cp /volumes/vimrc /home/netsec/.vimrc &&
+      bash /volumes/fix_depends.sh &&
+      ip route add 10.10.1.0/24 dev eth0 via 10.10.0.10 &&
+      tail -f /dev/null
+      "
+
+  #
+  # Firewall sits at the boundary
+  #
+
+  firewall:
+    image: netsos/rhit-netsec:fw
+    container_name: firewall
+    hostname: firewall
+    tty: true
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes/:/volumes
+    sysctls:
+      - net.ipv4.ip_forward=1
+    networks:
+      subnet1:
+        ipv4_address: 10.10.0.10
+      subnet2:
+        ipv4_address: 10.10.1.10
+    command: >
+      bash -c "
+      userdel netsec &&
+      groupadd -g ${GID} netsec_group &&
+      useradd -m -u ${UID} -g netsec_group -s /bin/bash netsec &&
+      echo 'netsec ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers &&
+      bash /volumes/check_config.sh &&
+      cp /volumes/vimrc /home/netsec/.vimrc &&
+      bash /volumes/fix_depends.sh &&
+      tail -f /dev/null
+      "
+
+  # http server running telnet and sshd as well
+  server:
+    image: netsos/rhit-netsec:fw
+    container_name: server
+    hostname: server
+    tty: true
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes/:/volumes
+    networks:
+      subnet2:
+        ipv4_address: 10.10.1.4
+    extra_hosts:
+      client1: "10.10.0.4"
+      client2: "10.10.0.5"
+    command: >
+      bash -c "
+      userdel netsec &&
+      groupadd -g ${GID} netsec_group &&
+      useradd -m -u ${UID} -g netsec_group -s /bin/bash netsec &&
+      echo 'netsec ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers &&
+      bash /volumes/check_config.sh &&
+      bash /volumes/setup_telnetd.sh &&
+      bash /volumes/fix_depends.sh &&
+      ip route add 10.10.0.0/24 dev eth0 via 10.10.1.10 &&
+      tail -f /dev/null
+      "
+
+  # local workstation
+  workstation:
+    image: netsos/rhit-netsec:fw
+    container_name: workstation
+    hostname: workstation
+    tty: true
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes/:/volumes
+    networks:
+      subnet2:
+        ipv4_address: 10.10.1.5
+    extra_hosts:
+      client1: "10.10.0.4"
+      client2: "10.10.0.5"
+    command: >
+      bash -c "
+      userdel netsec &&
+      groupadd -g ${GID} netsec_group &&
+      useradd -m -u ${UID} -g netsec_group -s /bin/bash netsec &&
+      echo 'netsec ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers &&
+      bash /volumes/check_config.sh &&
+      bash /volumes/fix_depends.sh &&
+      ip route add 10.10.0.0/24 dev eth0 via 10.10.1.10 &&
+      tail -f /dev/null
+      "
+
+networks:
+  subnet1:
+    name: subnet1
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
+  subnet2:
+    name: subnet2
+    ipam:
+      config:
+        - subnet: 10.10.1.0/24
