@@ -96,7 +96,7 @@ please replace it with the following
 to do it:
 
 ```shell
-wget https://netsos.csse.rose-hulman.edu/courses/netsec/assets/docker/docker-compose.yml .
+rm -f docker-compose.yml && wget https://netsos.csse.rose-hulman.edu/courses/netsec/assets/docker/docker-compose.yml .
 ```
 
 ---
