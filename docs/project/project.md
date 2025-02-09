@@ -17,6 +17,11 @@ concepts and them writing them in a way aimed at teaching them to others, you
 will gain a deeper understanding of network services, how they work, how they
 fail, and how they can be hardened.
 
+Please note that your improvised lab can be a combination of techniques that we
+have learned in this class. For example, having to perform a TCP session
+hijacking attack to obtain access to a firewall'ed service and open up a port
+to allow your traffic to enter into the network.
+
 # Learning Objectives
 
 At the end of this lab, you should be able to:
@@ -33,8 +38,8 @@ At the end of this lab, you should be able to:
 
 # Deliverables
 
-This project is split into three milestones distributed over the course of
-three weeks. At the end of the third week, you should present the following:
+This project is split into two milestones distributed over the course of two
+weeks. At the end of the third week, you should present the following:
 
 1. A detailed report that includes the following:
 
