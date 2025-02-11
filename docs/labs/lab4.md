@@ -77,6 +77,35 @@ on a different subnet trying to reach the server.
 
 ---
 
+# Before your start
+
+I have updated the `fw` container image to include all the needed package for
+this lab, so you won't need to install anything on the fly. To make sure your
+get the updated version, please do the following (on the host virtual machine,
+not the containers):
+
+1. Take down any running docker environments. You can use `dcps` and `docker
+   network ls` to make sure you have no leftover networks or containers.
+
+2. Pull the latest image of the firewall lab container using:
+
+  ```shell
+  $ docker pull netsos/rhit-netsec:fw
+  ```
+
+3. To make sure you have the right image, please check your image using:
+
+  ```shell
+  $ docker image ls
+  ```
+
+  You should see the `netsos/rhit-netsec` image with the `fw` tag to be updated
+  within a day or two.
+
+4. Finally, to save space, you can use `docker image prune` to remove any
+   dangling images.
+
+
 # Experiment 0: `nftables` sets
 
 Before we get started, we'll need to introduce an additional feature of
