@@ -1,12 +1,12 @@
 ---
 layout: page
 title: Lab 4
-last_modified_date: 2024-02-04
-current_term: Winter 2023-24
+last_modified_date: Mon Feb 10 23:21:59 EST 2025
+current_term: Winter 2024-25
 nav_order: 80
 parent: Labs
 lab_dir: lab4
-nav_exclude: true
+nav_exclude: false
 description: >-
   Lab 4 instructions
 ---
@@ -37,94 +37,34 @@ At the end of this lab, you should be able to:
 
 # Logistics
 
-## Getting the configuration
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4783832)
+to accept the assignment and obtain your own fork of the lab repository.
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+{: .important }
+The first time you accept an invitation, you will be asked to link your account
+to your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
 
-  ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
-  ```
+## Generating your `.env` file
 
-A folder called `{{ page.lab_dir }}` should show up in your directory, that is
-where you will do most of your lab.
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the lab repository directory as follows:
 
-## Patching the docker file
+```shell
+$ ./gen_env_file.sh
+```
 
-{:.warning}
-Before starting here, please make sure that your experiments from all other
-labs are down.  To do so, navigate back to the latest lab directory and do
-`docker compose down`.
+If run correctly, several files will be generated:
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it
-is the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-To do so, in the `{{ page.lab_dir }}` directory, run the patch script:
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  Done...
-  ```
-
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see two new files in your directory:
-`connect_client.sh` and `connect_server.sh`. You can use these scripts to
-directly connect to the desired host, without having to type the whole `docker
-container exec -it` command. Finally, I have also adjust the container's
-hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `client`, you can use:
-
-  ```sh
-$ ./connect_client.sh
-┌──(root㉿client)-[/]
-└─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are unable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `client`, you should replace that with
-`user-client` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all IP addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-IP address `10.10.0.1` with `10.11.0.1`.
-
-# Network topology
+## Network Topology
 
 In this lab, we have a web server protected by a firewall and a client sitting
 on a different subnet trying to reach the server.
@@ -141,7 +81,7 @@ on a different subnet trying to reach the server.
 
 Before we get started, we'll need to introduce an additional feature of
 `nftables` that will prove useful with stateful firewalls, and that is the
-ability to create and modify sets. A set is simple a kernel data structure that
+ability to create and modify sets. A set is simply a kernel data structure that
 holds some information which you can use to perform match operations.
 
 For example, you can define a specific set of IPv4 address that you would want
@@ -178,7 +118,7 @@ specify its type as `ipv4_addr` and then add some elements by default to it.
 We finally add the rule `ip saddr @allowed_ip counter accept`. This rule will
 apply to any packet with a source IPv4 address that matches **any** of the
 possible values in the set `allowed_ip`. If a match occurs, then the action
-taken is `counter accept` which keep track of the received packets and accepts
+taken is `counter accept` which keeps track of the received packets and accepts
 them. You can use `nft list table step0` to see the content of the table.
 
 ## Step 2: Finding the bug
@@ -199,21 +139,21 @@ List the content of your table and answer the following question:
 
 ## Step 3: Debugging and fixing the bug
 
-To help us understand what is going on even better, we can ask `nftables` log
-what is going on with the firewall rules. Let's go ahead and do that.
+To help us understand what is going on even better, we can ask `nftables` to
+log what is going on with the firewall rules. Let's go ahead and do that.
 
 First, add a new chain to the table, but have it run before the `firewall`
 chain (I am doing this from the command line, but feel free to append to your
 script):
 
 ```sh
-nft add chain ip step0 trace_debug { type filter hook forward priority -100 \; }
+sudo nft add chain ip step0 trace_debug { type filter hook forward priority -100 \; }
 ```
 
 Then add a tracing rule as follows:
 
 ```sh
-nft add rule step0 trace_debug ip protocol icmp meta nftrace set 1
+sudo nft add rule step0 trace_debug ip protocol icmp meta nftrace set 1
 ```
 
 This rule will enable tracing for all ICMP packets received on the `forward`
@@ -221,7 +161,7 @@ chain. To start viewing the trace, on the firewall container terminal, do the
 following:
 
 ```sh
-nft monitor trace
+sudo nft monitor trace
 ```
 
 Then try the ping again from the client to the server, you will see the trace
@@ -261,12 +201,12 @@ add set step0 allowed_ip {
 
 {:.warning}
 Before starting this experiment, make sure to delete the table from the
-previous experiment using `nft delete table step0`.
+previous experiment using `sudo nft delete table step0`.
 
 In this previous experiment, the set we defined was static, i.e., we did not
 change any of the elements in it based on the changes in the network. However,
-in most times, you'd like to modify your rules based on observations you see
-abut the traffic coming into the firewall. So we need a way to midify our sets
+in most times, we'd like to modify our rules based on observations we see
+abut the traffic coming into the firewall. So we need a way to modify our sets
 on the fly.
 
 ## Step 1: Timed entries
@@ -288,7 +228,7 @@ table ip e1s1 {
     type filter hook forward priority 0; policy drop;
 
     # allow everything coming out of the server
-    ip saddr 10.10.1.4 accept
+    ip saddr 10.10.1.5 accept
 
     # allow address from the outside to come in as well
     ip saddr @allowed_ip counter accept
@@ -309,14 +249,14 @@ entry in your set. After the timer expires, the entry will be **deteled** from
 the set.
 
 Let's go ahead and explore this rule. Assuming your `nft` script is called
-`e1s1.nft`, install the rules using `chmod +x e1s1.nft` and then `./e1s1.nft`.
-Quickly now, get on the client container and try to `ping` the server, you
-should be successful.
+`e1s1.nft`, install the rules using `chmod +x e1s1.nft` and then `sudo
+./e1s1.nft`. Quickly now, get on the client container and try to `ping` the
+server, you should be successful.
 
 You can view the timer entry for each element in your set by listing the table:
 
 ```sh
-$ nft list table e1s1
+$ sudo nft list table e1s1
 table ip e1s1 {
   set allowed_ip {
     type ipv4_addr
@@ -326,7 +266,7 @@ table ip e1s1 {
 
   chain firewall {
     type filter hook forward priority filter; policy drop;
-    ip saddr 10.10.1.4 accept
+    ip saddr 10.10.1.5 accept
     ip saddr @allowed_ip counter packets 2 bytes 168 accept
   }
 }
@@ -335,7 +275,7 @@ table ip e1s1 {
 Then, 45 seconds later, you can check out what happens to your set using:
 
 ```sh
-$ nft list table e1s1
+$ sudo nft list table e1s1
 table ip e1s1 {
   set allowed_ip {
     type ipv4_addr
@@ -344,14 +284,14 @@ table ip e1s1 {
 
   chain firewall {
     type filter hook forward priority filter; policy drop;
-    ip saddr 10.10.1.4 accept
+    ip saddr 10.10.1.5 accept
     ip saddr @allowed_ip counter packets 2 bytes 168 accept
   }
 }
 ```
 
 Now, if you try to reach the server from the client, your attempts will not be
-successful since the ip address of the client container has been removed from
+successful since the IP address of the client container has been removed from
 the set.
 
 ## Step 2: Updating timed entries
@@ -366,7 +306,7 @@ entry in a set and refresh its timeout value.
 To help us write better rules, especially when it comes to modifying sets, we
 will organize our rules as a tree of chains that a packet must traverse. So
 far, we have seen chains that were associated with a certain type and hook,
-however, we can also define **regular** chain.
+however, we can also define **regular** chains.
 
 A regular chain is one that does not see any packets by itself, it is not
 associated with a certain type or hook, but is used to be _called upon_ by
@@ -407,7 +347,7 @@ server from the client container. You should see the counter in the
 adjust as you see fit).
 
 ```sh
-$ nft list table e1s2
+$ sudo nft list table e1s2
 table ip e1s2 {
         chain icmp_chain {
                 counter packets 2 bytes 168
@@ -423,15 +363,15 @@ table ip e1s2 {
 
 ### Question sheet
 
-To navigate chain, `nftables` also provides another way to move between them,
+To navigate chains, `nftables` also provides another way to move between them,
 namely `goto` instead of `jump`. Let's see the difference between the two.
 
 First, modify the rule in the `firewall` chain to use `goto icmp_chain` instead
-of `jump icmp_chain`. Find the handle for the rule using `nft -a list table
-e1s2` and then update the rule (my handle number was 4):
+of `jump icmp_chain`. Find the handle for the rule using `sudo nft -a list
+table e1s2` and then update the rule (my handle number was 4):
 
 ```sh
-nft replace rule e1s2 firewall handle 4 ip protocol icmp goto icmp_chain
+sudo nft replace rule e1s2 firewall handle 4 ip protocol icmp goto icmp_chain
 ```
 
 Now try to ping the server from the client container again and answer the
@@ -459,8 +399,8 @@ following questions:
 Now that we can navigate between chains, we are ready to start updating our
 rules. Let's go back to our original `e1s1` table from the first step. Note
 that however we can no longer use the **interval** flag with for our set since
-we will be adding one ip at a time. We also removed the initial set of elements
-as we will be updating those during on the fly.
+we will be adding one IP at a time. We also removed the initial set of elements
+as we will be updating those on the fly.
 
 ```sh
 #!/usr/sbin/nft -f
@@ -475,7 +415,7 @@ table ip e1s1 {
     type filter hook forward priority 0; policy drop;
 
     # allow everything coming out of the server
-    ip saddr 10.10.1.4 accept
+    ip saddr 10.10.1.5 accept
 
     # allow address from the outside to come in as well
     ip saddr @allowed_ip counter accept
@@ -491,10 +431,10 @@ chain add_to_set {
 }
 ```
 
-The rule installed in this regular chain is one that add the source IP address
+The rule installed in this regular chain is one that adds the source IP address
 for all received packets to the set, with a timeout value of 30 seconds.
 Finally, we need to have a trigger that will cause this `add_to_set` regular
-chain to be called up. For simplicy, we will assume that any ICMP packet
+chain to be called up. For simplicity, we will assume that any ICMP packet
 received from an IP address will cause that address to be added to the set.
 Therefore, we'd need a rule of the following form: `ip protocol icmp jump
 add_to_set`.
@@ -518,7 +458,7 @@ table ip e1s1 {
   chain firewall {
     type filter hook forward priority 0; policy drop;
     # allow everything coming out of the server
-    ip saddr 10.10.1.4 accept
+    ip saddr 10.10.1.5 accept
     # send icmp packets to the add_to_set chain
     ip protocol icmp jump add_to_set
     # allow address from the outside to come in as well
@@ -600,9 +540,11 @@ Here are the requirements:
 
 1. If you attempt to connect to port 23 without knowing the secret knock, your
    traffic will be blocked.
+
 2. After sending a SYN packet to port 9587, you have 10 seconds to start your
    telnet connection. If you do not do so, you will have to restart the knock
    sequence.
+
 3. If you send traffic on any other port after starting the knock sequence, you
    will have to restart the sequence again.
 
@@ -618,6 +560,7 @@ Here are the requirements:
 
    Time 2 (<10): Client sends packet on port 23  ==== packet dropped, need to restart the sequence!
    ```
+
 4. The client will need to refresh their access to the server every 45 seconds.
 
 5. No traffic to any other port or any other protocol should be allowed to
@@ -628,7 +571,7 @@ Here are the requirements:
 Here are a few hints:
 
 - To remove an entry from a set, you can use this rule:
-  `update @my_set { ip saddr timeout 0}`
+  `update @my_set { ip saddr timeout 0 }`
 
 - The order of your rules **matters**, be intentional about how you approach
   ordering your rules.
@@ -637,10 +580,10 @@ Here are a few hints:
   destination port and `tcp sport 9587` for the source port.
 
 - You can also match ports that are not equal a certain port, for example:
-  `tcp drop != 23` to match any port other than 23.
+  `tcp dport != 23` to match any port other than 23.
 
 - To match TCP packets with **only** the `SYN` flag, you can use:
-  `tcp falgs == syn`.
+  `tcp flags == syn`.
 
 ### Testing
 
@@ -649,10 +592,6 @@ on demand. You can write your own scripts to do so, but there is a great tool
 that allows you to do so, namely `hping3`. Check out the man page for `hping3`
 for a full list of what you can do. Below we list out a few things that are
 useful for our experiment.
-
-{:.highlight}
-If `hping3` is not installed, you can install it using `apt update && apt
-install -y hping3 man`.
 
 1. To generate a TCP syn packet at port 9587 you can use;
    `hping3 -c 1 -S -p 9587 server` on the client container.
@@ -681,7 +620,7 @@ can login.
 To test rule 4, make sure the `telnet` connection is established and wait for
 45 seconds before trying to type anything in the `telnet` terminal, it should
 hang and you will not be able to execute any commands (to exit our of it using
-`c-]` - i.e., control and `[` and then type `q` or `quit`).
+`c-]` - i.e., control and `]` and then type `q` or `quit`).
 
 Testing rule 5 should be easy.
 
@@ -745,7 +684,7 @@ ports for them on the protected network.
 
 In the space below (on the question sheet), think about possible ways in which
 this approach can be broken down. There are two major limitations with this
-approach that we'd like to tackle in the next set of concept labs and labs.
+approach that we'd like to tackle in the next concept lab.
 
 # Submission
 
