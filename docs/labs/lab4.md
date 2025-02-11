@@ -623,28 +623,28 @@ for a full list of what you can do. Below we list out a few things that are
 useful for our experiment.
 
 1. To generate a TCP syn packet at port 9587 you can use;
-   `hping3 -c 1 -S -p 9587 server` on the client container.
+   `sudo hping3 -c 1 -S -p 9587 server` on the client container.
 
 2. Similarly to generate a syn packet at port 23, you can use:
-   `hping3 -c 1 -S -p 23 server`.
+   `sudo hping3 -c 1 -S -p 23 server`.
 
 3. To start the `telnet` session, you can use `telnet server` on the client
    container.
 
 To test rule 1, simply start a `telnet` connection and it shouldn't go through.
 
-To test rule 2, send a syn packet to port 9587 using `hping3 -c 1 -S -p 9587
-server` and make sure that your table has updated. Then, wait for 10 seconds,
-and make sure that your table have updated correctly again.
+To test rule 2, send a syn packet to port 9587 using `sudo hping3 -c 1 -S -p
+9587 server` and make sure that your table has updated. Then, wait for 10
+seconds, and make sure that your table have updated correctly again.
 
-To test rule 3, first send a syn packet using `hping3 -c 1 -S -p 9587 server`
-and make sure that the table has updated. Within 10 seconds, send another syn
-packets to any other port (other than 23) using `hping3 -c 1 -S -p 9588
-server`.
+To test rule 3, first send a syn packet using `sudo hping3 -c 1 -S -p 9587
+server` and make sure that the table has updated. Within 10 seconds, send
+another syn packets to any other port (other than 23) using `sudo hping3 -c 1
+-S -p 9588 server`.
 
-To test correct port knocking sequence, you can use `hping3 -c 1 -S -p 9587
-server ; telnet server` and the telnet session should be established and you
-can login.
+To test correct port knocking sequence, you can use `sudo hping3 -c 1 -S -p
+9587 server ; telnet server` and the telnet session should be established and
+you can login.
 
 To test rule 4, make sure the `telnet` connection is established and wait for
 45 seconds before trying to type anything in the `telnet` terminal, it should
@@ -654,10 +654,10 @@ hang and you will not be able to execute any commands (to exit our of it using
 Testing rule 5 should be easy.
 
 Finally, to check that only syn packets are able to trigger the port knocking
-sequence, try the following `hping3 -c 1 -S -A -p 9587 server ; telnet server`.
-This will send a TCP packet with both SYN and ACK flags set, which should not
-trigger the port knocking sequence and thus must not allow the telnet session
-to take place.
+sequence, try the following `sudo hping3 -c 1 -S -A -p 9587 server ; telnet
+server`. This will send a TCP packet with both SYN and ACK flags set, which
+should not trigger the port knocking sequence and thus must not allow the
+telnet session to take place.
 
 ## Step 2: A bit better
 
