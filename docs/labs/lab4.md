@@ -677,6 +677,27 @@ after doing the port knocking sequence. Keep the connection alive for more than
 that. Then check if the telnet session is still active. If it is, you should be
 good to move on.
 
+## (Optional) Step 2.5: Wring a brute force exploit
+
+To see why using a single port for a port knocking sequence is a bad idea, try
+writing a script that will try every single possible port (recall that port
+numbers are 16 bits wide) and then attempt to establish a `telnet` connection
+with each one. Once it is able to establish the connection, it would broken the
+port knocking "sequence" and would have found the exploit.
+
+You do not have to do this part but it is quite fun to do, and it is very
+simple. You can see that writing a simple brute force port knocking "breaker"
+doesn't take much.
+
+{:.highlight}
+_Hint_: The simplest way to do this is to write it in a `bash` script and use a
+combination of `hping3` and (optionally) `telnet`. Alternatively, you can do
+this in `python` or even `libpcap` for more flexibility and a faster
+implementation. The advantage of using `python` or `C` is that you can even do
+this in a multi-threaded implementation, and thus get an even faster
+performance (think scaling up once the port knocking sequence becomes harder to
+crack). However, a simple `bash` script would do the job.
+
 ## Step 3: Full port knocking
 
 In this final step, we'd like to mix things up a bit and do a real port
@@ -699,11 +720,18 @@ to establish a `telnet` connection to the server. The rules for this setup are
 the same as the rules in step 2 (i.e., established connections should not need
 to restart the port knocking sequence every 45 seconds).
 
+{:.highlight}
+If you have done step 2.5, then reflect on how harder it becomes to perform a
+brute force attack on this port knocking sequence. Moreover, you should be able
+to appreciate more the use of `UDP` ports as well as using `TCP` ports in the
+sequence above.
+
 ### Question sheet
 
 Before you write down the script for your rules, on your question sheet, please
 draw a _finite state machine_ that represents the possible states that your
 firewall might be in when receiving packets.
+
 
 # Reflection
 
