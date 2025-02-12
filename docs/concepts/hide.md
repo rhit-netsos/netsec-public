@@ -1,12 +1,12 @@
 ---
 layout: page
 title: Hiding a network service
-last_modified_date: 2024-02-12
-current_term: Winter 2023-24
+last_modified_date: Wed Feb 12 14:46:10 EST 2025
+current_term: Winter 2024-25
 nav_order: 80
 parent: Concepts
 lab_dir: hide
-nav_exclude: true
+nav_exclude: false
 description: >-
   Introduction to service isolation
 ---
@@ -21,17 +21,18 @@ description: >-
 
 # Introduction
 
-In lab 4, we established a port knocking sequence that allowed us to ask client
-to know a certain secret sequence of ports that they must hit before being
-allowed to access a given port. However, the problem with that is we have no
-way to autenticate however knows the port sequence is actually someone we can
-trust; they might have beaten the sequence out of someone we know, and now they
-can access our hidden service. Furthermore, once our sequence is compromised,
-changing that sequence and letting everyone know becomes a problem.
+In lab 4, we established a port knocking sequence that allowed us to ask a
+client to know a certain secret sequence of ports that they must hit before
+being allowed to access a given port. However, the problem with that is we have
+no way to authenticate that however knows the port sequence is actually someone
+we can trust; they might have beaten the sequence out of someone we know, and
+now they can access our hidden service. Furthermore, once our sequence is
+compromised, changing that sequence and letting everyone know becomes a
+problem.
 
 Therefore port knocking without authentication is an issue that we must
 address. In this concept lab, we will examine one possible way to hide services
-by using other autenticated services.
+by using other authenticated services.
 
 # Learning objectives
 
@@ -42,94 +43,35 @@ At the end of this lab, you should be able to:
 
 # Logistics
 
-## Getting the configuration
+For this lab, we will be using GitHub classroom to get the starter code. Please
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4783832)
+to accept the assignment and obtain your own fork of the lab repository.
 
-To start with this lab, login to the class server, and navigate to your
-`netsec-labs-username` directory. Grab the latest updates using:
+{: .important }
+The first time you accept an invitation, you will be asked to link your account
+to your student email and name. Please be careful and choose your appropriate
+name/email combination so that I can grade appropriately.
 
-  ```shell
-  (class-server) $ git fetch upstream
-  (class-server) $ git pull upstream main
-  ```
+## Generating your `.env` file
 
-A folder called `{{ page.lab_dir }}` should show up in your directory, that is
-where you will do most of your lab.
+Before we spin up our containers, there are some configuration variables that
+must be generated on the spot. To do so, please run the `gen_env_file.sh`
+script from the lab repository directory as follows:
 
-## Patching the docker file
+```shell
+$ ./gen_env_file.sh
+```
 
-{:.warning}
-Before starting here, please make sure that your experiments from all other
-labs are down.  To do so, navigate back to the latest lab directory and do
-`docker compose down`.
+If run correctly, several files will be generated:
 
-I have updated the patch script to no longer ask you for your username and
-subnet, it will try to extract those on its own and print out your subnet (it
-is the same on as the one announced on the Moodle page). Also, it now generates
-scripts for you to connect to your hosts quickly.
+1. `.env` (hidden file - use `ls -al` to see it) contains your UID and GID
+   variables.
 
-To do so, in the `{{ page.lab_dir }}` directory, run the patch script:
+2. `connect_*.sh` a utility script to quickly connect to each container in this
+   lab.
 
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  Done...
-  ```
 
-If you had already patched your script, you will see something like this:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh
-  Attempting to fetch subnet automatically...
-  Found your subnet, it is 10.10
-  [ERROR] ########################################################################
-  [ERROR] # It looks like your docker-compose.yml file has already been patched. #
-  [ERROR] #                                                                      #
-  [ERROR] # If you are having issues bringing up the environment, it means it is #
-  [ERROR] #  still in use.                                                       #
-  [ERROR] #                                                                      #
-  [ERROR] # Try to take down the experiment first, then bring it up again.       #
-  [ERROR] #  To bring it down: docker compose down                               #
-  [ERROR] #  To bring it up:   docker compose up -d                              #
-  [ERROR] ########################################################################
-  ```
-
-If for some reason, the script fails to find your subnet, you can override its
-behavior by providing your subnet on the command line:
-
-  ```sh
-  (class-server) $ ./patch_docker_compose.sh SUBNET
-  ```
-
-If all goes well, you should also see two new files in your directory:
-`connect_client.sh` and `connect_server.sh`. You can use these scripts to
-directly connect to the desired host, without having to type the whole `docker
-container exec -it` command. Finally, I have also adjust the container's
-hostnames to make it easier for you to identify which is which.
-
-For example, to connect to `client`, you can use:
-
-  ```sh
-$ ./connect_client.sh
-┌──(root㉿client)-[/]
-└─#
-  ```
-
-Hopefully, that would make things a bit easier for you.
-
-{:.highlight}
-If you are unable to execute a script due to a permissions issue, then try the
-following `$ chmod +x <script name.sh>` to make it executable and try again.
-
-{:.warning}
-In the remainder of this document, I will not be using your specific prefixes
-and subnets. For example, when I refer to `client`, you should replace that with
-`user-client` where `user` is your RHIT username. Similarly, I will be using
-`10.10.0` as the default subnet, you should replace that in all IP addresses
-with your own subnet. For example, if your subnet is `10.11.0`, then replace the
-IP address `10.10.0.1` with `10.11.0.1`.
-
-# Network topology
+## Network topology
 
 In this lab, we have a web server protected by a firewall and a client sitting
 on a different subnet trying to reach the server.
@@ -151,10 +93,10 @@ on a different subnet trying to reach the server.
 The goal of this concept lab is to able to obtain a secret from a webserver
 running on port 80 on the `server` container. However, we are only allowed to
 access the server from the `browser` container, i.e., all of your actions must
-be done by first accessing the `browser` container. The password you obtain
-will be the key to unlocking the next lab.
+be done by first accessing the `browser` container.
+<!-- The password you obtain will be the key to unlocking the next lab. -->
 
-Unfortunately, the `firewall` between the browser and the server drop all
+Unfortunately, the `firewall` between the browser and the server drops all
 traffic destined to the `server` and only allows traffic going through to the
 `workstation` container. This necessarily means that the `server` cannot
 communicate with anyone not on the same subnet. In fact, it does not know how
@@ -176,7 +118,7 @@ run an `nmap` scan on the container, but we'd need to scan all possible `TCP`
 ports open. To do so, you can use the `-p` flag in `nmap` as follows:
 
 ```sh
-nmap -p 1-65535 workstation
+sudo nmap -p 1-65535 workstation
 ```
 
 This will launch a scan on all possible ports (1 through 65535) using the `TCP`
@@ -194,12 +136,12 @@ ones). Your first task is to look through the `nmap` documentation and trigger
 find out the service running on that TCP port; it is really a simple flag you
 pass to `nmap`.
 
-In addition, we'd like to know how `nmap` does it's service  discovery. To do
-so, do the following:
+In addition, we'd like to know how `nmap` does its service discovery. To do so,
+do the following:
 
 1. Grab two terminals on the `browser` container. In one, run `tcpdump` to
-   capture tcp packets leaving the machine as follows: `tcpdump -i eth0 tcp -w
-   /volumes/discovery.pcap`.
+   capture tcp packets leaving the machine as follows: `sudo tcpdump -i eth0
+   tcp -w /volumes/discovery.pcap`.
 
 2. On the other terminal window, start the `nmap` service discovery. Since we
    know which port we are targeting, we don't really need to run another scan,
@@ -207,8 +149,8 @@ so, do the following:
    argument for the `-p` flag in the example above to be on specific port
    (instead of the 1-65535 range we gave before).
 
-   Combine that with the service discover flag and `nmap` will tell you which
-   service is running on that port weird port.
+   Combine that with the service discovery flag and `nmap` will tell you which
+   service is running on that weird port.
 
 ### Question sheet
 
@@ -257,6 +199,6 @@ questions:
 
    {:.warning}
    Note that we are not doing web-based authentication here, we would like to
-   hide the entire server machine, i.e., not traffic should reach the server
+   hide the entire server machine, i.e., no traffic should reach the server
    unless you have the proper authentication.
 
