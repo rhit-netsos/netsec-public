@@ -44,7 +44,7 @@ At the end of this lab, you should be able to:
 # Logistics
 
 For this lab, we will be using GitHub classroom to get the starter code. Please
-follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4783832)
+follow this [link](https://moodle.rose-hulman.edu/mod/url/view.php?id=4787843)
 to accept the assignment and obtain your own fork of the lab repository.
 
 {: .important }
