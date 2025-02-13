@@ -12,6 +12,9 @@ Feb 11
 Feb 13
 : **Milestone 1 Due end of the week**{: .label .label-red}
 : [Milestone 1 Description]({{site.baseurl}}/docs/project/milestone1/)
+: **Mini Lab 07 Released**{: .label .label-blue}
+: [Mini Lab 07: Service Hiding]({{site.baseurl}}/docs/concepts/hide/)
+  : [Question sheet]({{site.baseurl}}/assets/concepts/hide.pdf)
 
 <!--
 Feb 05
