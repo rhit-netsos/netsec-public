@@ -1,6 +1,15 @@
 ---
 title: "Week 10: Tunneling and VPN"
 ---
+
+Feb 18
+: Continue wrapping up labs
+: **Project Milestone 2**{: .label .label-red}
+  : [Milestone 2 Description]({{site.baseurl}}/docs/project/milestone2/)
+
+Feb 20
+: Wrap everything up and submit
+
 <!--
 Feb 12
 : Finish up [lab 4]({{site.baseurl}}/docs/labs/lab4)
