@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Syllabus
-last_modified_date: Sun Nov 26 19:21:37 2023
+last_modified_date: 2025-11-06T23:12:49
 nav_order: 2
 description: >-
   Course syllabus
@@ -41,10 +41,10 @@ At the end of this class, you should be able to:
 - Identify security vulnerabilities in network protocols and exploit them in a
   controlled environment.
 - Actively engage in the design and protection of network components.
-- Work in a team to produce a laboratory assignment that can be used by future
-  students in the class, on a topic of your choice.
 - Practice relaying learned concepts to other students by presenting your lab
   results in the classroom.
+- Work in a team to produce a laboratory assignment that can be used by future
+  students in the class, on a topic of your choice.
 
 ## Course delivery
 
@@ -54,17 +54,20 @@ times will include a short lecture, a demo, and then time for you to work on
 your labs and ask questions as you go on.
 
 While doing the labs, you will answer a series of guided questions that will
-allow you to finally define basic networking and security concepts, and then
+enable you to finally define basic networking and security concepts, and then
 stitch them together to form a coherent lecture.
 
 ### Paper discussion
 
-In addition to lab quizzes/reports, you will be asked to read research papers
+In addition to lab quizzes/reports, I will asked you to read research papers
 and comment on them with your thoughts/impressions based on your observations
-in the labs. We will do this using the [Perusall](https://www.perusall.com/)
-tool where we can collaboratively read and comment on research papers.
+in the labs.
 
 <!--
+We will do this using the [Perusall](https://www.perusall.com/)
+tool where we can collaboratively read and comment on research papers.
+-->
+
 ### Peer teaching
 
 In addition to lab quizzes/reports, you will be asked to work with a group of
@@ -73,16 +76,15 @@ describe your findings as if you were the class instructor.
 
 These peer teaching sessions will be graded by your instructor as well as your
 peers in the classroom.
--->
 
 ### Project
 
 As part of the class, you will work with a group of classmates to design a
-network security laboratory assignment. You are expected to design experiments
-that can be used by your peers in the classroom to work through a security
+network security laboratory assignment. I expect you to design experiments
+that are usable by your peers in the classroom to work through a security
 concept and learn about it as they do the lab.
 
-### [Tentative] Final exam
+### [Tentative] Alternate Project
 
 At the end of the quarter, depending on how many students are still registered,
 you might be tasked with infiltrating an already established network. You will
@@ -96,7 +98,7 @@ as of yet still tentative, it will share a small fraction of your final grade.
 ## Textbook
 
 There is no required textbook for this class, I have found that eventually I end
-up creating content for class that is based on an amalgamation of content from
+up creating content for class based on an amalgamation of content from
 textbooks, papers, YouTube videos, blog posts, and so on. I will try as much as
 possible to make the course self-contained when it comes to the material that
 are publicly available.
@@ -104,7 +106,7 @@ are publicly available.
 ### Recommended textbook
 
 However, there must be a resource that shines away from the competition; in this
-case, it is "Internet Security: A Hands-on Approach" by Wenliang Du. This is a
+case, it's "Internet Security: A Hands-on Approach" by Wenliang Du. This is a
 great textbook that covers most of what we will go through in this class in a
 way that covers both theory and practice, so I recommend that you purchase a
 copy of this book and keep it with you for later-on reference in your career.
@@ -116,8 +118,7 @@ copy of this book and keep it with you for later-on reference in your career.
 If you'd like to check out the book, I have an extra copy in my office that I
 would be happy to lend you to read in the CS labs.
 
-### Supplemental textbook(s)
-
+### Supplemental textbooks
 
 In addition to the above textbook, I used the following list of references to
 design the course material:
@@ -146,10 +147,10 @@ grade.
 
 | Item                   | Weight |
 | :----                  | :----- |
-| Lab assignments        | 50%    |
-| Paper reading          | 25%    |
+| Lab assignments        | 60%    |
+| Paper reading          | 5%     |
+| Peer Teaching          | 15%    |
 | Project                | 20%    |
-| [Tentative] Final exam | 5%     |
 
 ## Instructor
 
